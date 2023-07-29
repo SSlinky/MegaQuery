@@ -6,12 +6,15 @@
 // Dependencies:
 //  - decodeUrl
 
-// Parses a SharePoint URL, returning a list of parts.
-// Args:
-//  sharePointUrl: the full encoded url of the directory.
-// Returns:
-//  A list containing the Company, Team, and Folder Path.
 (sharePointUrl as text) as list =>
+// Parses a SharePoint URL, returning a list of parts.
+//
+// Args:
+//    sharePointUrl: the full encoded url of the directory.
+//
+// Returns:
+//    A list containing the Company, Team, and Folder Path.
+
 let
     // Helper function to strip all args except RootFolder if it exists.
     StripUrlArgs = (url as text) => let
