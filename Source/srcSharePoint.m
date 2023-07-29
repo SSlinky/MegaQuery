@@ -1,4 +1,7 @@
 // Copyright (C) 2023 Samuel Vanderslink
+// Permission granted under the MIT Open Source licence.
+// The above copyright notice shall be included in all
+// copies or substantial portions of the Software.
 
 // Dependencies:
 //  - decodeUrl

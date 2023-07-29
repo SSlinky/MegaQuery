@@ -1,5 +1,7 @@
 // Copyright (C) 2023 Samuel Vanderslink
-// Decodes a url by performing text replacements.
+// Permission granted under the MIT Open Source licence.
+// The above copyright notice shall be included in all
+// copies or substantial portions of the Software.
 
 (encodedUrl as text) as text =>
     List.Accumulate(
