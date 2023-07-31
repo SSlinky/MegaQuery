@@ -4,7 +4,7 @@
 // copies or substantial portions of the Software.
 
 // Dependencies:
-//  - decodeUrl
+//  - DecodeUrl
 
 (sharePointUrl as text) as list =>
 // Parses a SharePoint URL, returning a list of parts.
