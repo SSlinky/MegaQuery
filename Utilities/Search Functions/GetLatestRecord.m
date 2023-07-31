@@ -16,7 +16,6 @@
 //
 // Returns:
 //    A record containing the file and its attributes.
-//
 
     Table.Sort(
         Table.SelectRows(tbl, predicate),
