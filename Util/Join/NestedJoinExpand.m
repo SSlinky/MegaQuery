@@ -3,6 +3,9 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Join
+// QueryName: NestedJoinExpand
+
 (tbl1 as table, key1 as list, tbl2 as table, key2 as list,
     columnNames as list, optional joinKind as number) as table =>
 // Performs the join and expand in one function.

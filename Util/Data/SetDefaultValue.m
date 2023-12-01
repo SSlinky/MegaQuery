@@ -3,8 +3,10 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Data
+// QueryName: SetDefaultValue
 // Dependencies:
-//  - ApplyColumnTypes
+//  - /Util/DataApplyColumnTypes
 
 (tbl as table, value as any, fieldNames as list) as table =>
 // Replaces null values in a list of fields with the passed in value.

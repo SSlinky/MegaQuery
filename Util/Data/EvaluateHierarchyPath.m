@@ -3,7 +3,10 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
-(tbl as table, childCol as text, parentCol as text, steps as number) =>
+// Namespace: /Util/Data
+// QueryName: EvaluateHierarchyPath
+
+(tbl as table, childCol as text, parentCol as text, steps as number) as table =>
 // Evaluates a child-parent path to the highest node.
 //
 // This function takes a parent-child relationship and converts it to a full

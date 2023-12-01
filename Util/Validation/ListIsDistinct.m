@@ -3,6 +3,9 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Validation
+// QueryName: ListIsDistinct
+
 (lst as list) as logical =>
 // Validates the list has unique values.
 //

@@ -3,6 +3,9 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Data
+// QueryName: ApplyColumnTypes
+
 (sourceTable as table, targetTable as table) =>
 // Applies the column types of one table to another table.
 //

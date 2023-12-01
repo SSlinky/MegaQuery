@@ -3,6 +3,9 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/String
+// QueryName: GenRandomString
+
 (optional len as number) as text =>
 // Returns a random alpha-numeric string.
 //

@@ -3,8 +3,10 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Data
+// QueryName: ReplaceValueEach
 // Dependencies:
-//  - ApplyColumnTypes
+//  - /Util/DataApplyColumnTypes
 
 (tbl as table, replacer as function, fieldNames as list) as table =>
 // Value replacement applied to multiple columns that maintains original types.

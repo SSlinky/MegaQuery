@@ -3,6 +3,9 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Data
+// QueryName: IndexOver
+
 (tbl as table, over as list, newColName as text, startAt as number) as table =>
 // Adds an incrementing index that resets over groups.
 //

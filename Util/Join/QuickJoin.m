@@ -3,16 +3,13 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Join
+// QueryName: QuickJoin
 // Dependencies:
-//  - ListIsDistinct
+//  - /Util/Validation/ListIsDistinct
 
-(
-    select as list, 
-    from as table,
-    joinKind as nullable number,
-    to as table,
-    on as list
-) =>
+(select as list, from as table, joinKind as nullable number,
+    to as table, on as list) as table =>
 // A more SQL like join experience for Power Query.
 //
 // Automatically prefixes column names with a and b to
@@ -22,14 +19,15 @@
 // SELECT * FROM t1 AS a INNER JOIN t2 AS b ON a.ID=b.ID
 // QuickJoin({}, t1, JoinKind.Inner, t2, {"a.ID", "b.ID"})
 //
+// Left and right table columns are prefixed with a and b
+// respectively to eliminate the risk of naming clash.
+//
 // Args:
 //    select: the columns to select or an empty list for all.
-//      Names should be explicitly prefixed, e.g. "a.ID"
 //    from: the left side of the join.
 //    joinKind: the type of join.
 //    to: the right side of the join.
 //    on: the columns to join on, prefixed with a and b.
-//      Names should be explicitly prefixed, e.g. "a.ID"
 //
 // Returns:
 //    The joined table.

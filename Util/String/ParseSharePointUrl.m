@@ -3,8 +3,10 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/String
+// QueryName: ParseSharePointUrl
 // Dependencies:
-//  - DecodeUrl
+//  - /Util/String/DecodeUrl
 
 (sharePointUrl as text) as list =>
 // Parses a SharePoint URL, returning a list of parts.

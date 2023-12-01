@@ -3,9 +3,11 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Utils/Source
+// QueryName: SharePointDirectory
 // Dependencies:
-//  - decodeUrl
-//  - parseSharePointUrl
+//  - /Util/String/DecodeUrl
+//  - /Util/String/parseSharePointUrl
 
 // Paste the full SharePoint URL directly from the browser. Sign in may be required.
 (sharePointUrl as text) as table =>

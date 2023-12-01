@@ -3,6 +3,9 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Data
+// QueryName: MergeApply
+
 (tbl as table, column as text, mapTo as list, mapFrom as list, mergeMode as nullable number) as table =>
 // Replaces values using a column of records or a column of tables.
 //

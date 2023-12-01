@@ -3,10 +3,14 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Search
+// QueryName: GetLatestRecord
+
 (tbl as table, predicate as function, optional dateField as text) as record =>
 // Returns the most recent file matching the given predicate.
 //
-// This function is useful for returning the most recently edited version of a file, e.g.,
+// This function is useful for returning the most recently edited version
+// of a file. It is designed to complement the output of SharePointDirectory, e.g.,
 // Source = GetLatestRecord(srcSharePoint, each Text.Contains([Name], "myFile"))
 //
 // Args:

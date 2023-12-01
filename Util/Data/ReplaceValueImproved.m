@@ -3,8 +3,10 @@
 // The above copyright notice shall be included in all
 // copies or substantial portions of the Software.
 
+// Namespace: /Util/Data
+// QueryName: ReplaceValueImproved
 // Dependencies:
-//  - ApplyColumnTypes
+//  - /Util/DataApplyColumnTypes
 
 (tbl as table, value as function, replacer as function, fieldNames as list) as table =>
 // Shorthand value replacement that maintains original types.
