@@ -7,14 +7,22 @@
 //  - decodeUrl
 //  - parseSharePointUrl
 
-// SharePoint team files at a given path.
 // Paste the full SharePoint URL directly from the browser. Sign in may be required.
+(sharePointUrl as text) as table =>
+// Returns SharePoint files at a given directory path.
+//
+// Args:
+//    sharePointUrl: a full, unedited SharePoint url.
+//
+// Returns:
+//    A table with files at the URL.
+//
 let
     // Flag true to import subdirectories, false to match exact path only.
     optionImportSubdirectories = false,
 
     // Parses the URL to return {company, team, file path}
-    parsedUrl = parseSharePointUrl("https://company.sharepoint.com/sites/team/"),
+    parsedUrl = parseSharePointUrl(sharePointUrl),
     // Builds the base SharePoint URL.
     baseUrl = Text.Format("https://#{0}.sharepoint.com/sites/#{1}/", parsedUrl),
     // Extracts the path from the parse results.
