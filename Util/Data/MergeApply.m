@@ -5,6 +5,8 @@
 
 // Namespace: /Util/Data
 // QueryName: MergeApply
+// Dependencies:
+//  - /Util/String/GenRandomString
 
 (tbl as table, column as text, mapTo as list, mapFrom as list, mergeMode as nullable number) as table =>
 // Replaces values using a column of records or a column of tables.
@@ -12,9 +14,6 @@
 // Functionally the same as Table.ExpandTableColumn except that values
 // are conditionally merged into the existing data set. No additional
 // columns are added and the expandable column is consumed.
-//
-// Dependencies:
-//  - RandomString
 //
 // Args:
 //    tbl: the table to act on.
@@ -31,7 +30,7 @@ let
     rf = (x as record, y as text) => Record.Field(x, y),
 
     // Prefix the Right columns with a random string to avoid duplicate field errors.
-    prefix = RandomString(),
+    prefix = GenRandomString(),
     mapFromPrefixed = List.Transform(mapFrom, each prefix & _),
 
     // Expand the column and rename with the prefixed names.
