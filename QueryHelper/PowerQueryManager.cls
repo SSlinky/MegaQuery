@@ -132,11 +132,36 @@ Attribute ReadRepoQuery.VB_Description = "Reads a query from a text file."
 '
     Dim fileNum As Long
     fileNum = FreeFile()
+
     Open filePath For Input As fileNum
     On Error Resume Next
     ReadRepoQuery = Input$(LOF(fileNum), fileNum)
     Close fileNum
 End Function
+
+Private Sub AddAncestors(q As PowerQuery, ancestors As Dictionary)
+Attribute AddAncestors.VB_Description = "Adds the ancestors for a query to the dictionary."
+'   Adds the ancestors for a query to the dictionary.
+'
+'   Args:
+'       q: The query to add ancestors for.
+'       ancestors: The ancestors dictionary to add to.
+'
+'   Returns:
+'
+'   Raises:
+'
+'   Check if branch has been walked.
+    If ancestors.Exists(q.Name) Then Exit Sub
+
+'   Find and add ancestors.
+    ancestors.Add q.Name, q
+
+    Dim k As Variant
+    For Each k In q.Ancestors
+        AddAncestors q.Ancestors(k), ancestors
+    Next k
+End Sub
 
 ' Event Handlers
 '-------------------------------------------------------------------------------
