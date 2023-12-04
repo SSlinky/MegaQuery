@@ -73,14 +73,30 @@ Attribute PruneQueries.VB_Description = "Prunes all queries not an ancestor of t
 '
 '   Args:
 '       queryNames: An array of queries to keep.
-'                   Also keeps any queries they depend on.
+'
+'   Deletes queries not explicitly lists, or an ancestor or a query explicitly
+'   listed from the workbook. Passing no queries prunes all queries.
+'   This action cannot be undone.
 '
 '   Raises:
 '       QueryNotFound exception if a query name doesn't exist.
 '
+    Dim keepQueries As Dictionary
+    Dim queryName As Variant
+    Dim pq As PowerQuery
+    For Each queryName In queryNames
+        If Not mWorkbookQueries.Exists Then
+            Err.Raise vbObjectError + 2, "Query not found: " & queryName
+        End If
+        Set pq = New PowerQuery
+        pq.Formula = mWorkbookQueries(queryName).Formula
+        AddAncestors pq, keepQueries
+    Next queryName
 
-    ' Validate all names and throw first. Ignoring it could cuase a typo to
-    ' see queries you wanted to keep deleted.
+    Dim q As WorkbookQuery
+    For Each q In mWorkbookQueries
+        If Not ancestors.Exists(q.Name) Then q.Delete
+    Next q
 
     ' Maybe add some smarts to delete orphaned list objects / sheets.    
 End Sub
