@@ -40,12 +40,14 @@ Option Explicit
 Private mQuery As WorkbookQuery
 Private mName As String
 Private mDescription As String
+Private mAncestors As Dictionary
 
 Private mText As String
 Private mTextDirty As Boolean
 
 Private mFormula As String
 Private mFormulaDirty As Boolean
+
 
 ' Properties
 '-------------------------------------------------------------------------------
@@ -89,8 +91,33 @@ Attribute Formula.VB_Description = "Represents the Query.Formula."
 End Property
 
 Public Property Get Formula() As String
+    If mFormulaDirty Then Deserialise
     Formula = mFormula
 End Property
+
+Public Property Get Ancestors() As Dictionary
+Attribute Ancestors.VB_Description = "Gets this query's dependencies."
+'   Gets this query's dependencies.
+    Set Ancestors = mAncestors
+End Property
+
+Private mNamespace As String
+Public Property Let Namespace(var As String)
+Attribute Namespace.VB_Description = "The query's folder path."
+'   The query's folder path.
+    mNamespace = var
+End Property
+
+Public Property Get Namespace() As String
+    Namespace = mNamespace
+End Property
+
+
+' Constructor
+'-------------------------------------------------------------------------------
+Private Sub Class_Initialize()
+    Set mAncestors = New Dictionary
+End Sub
 
 
 ' Methods
@@ -101,12 +128,12 @@ Attribute Update.VB_Description = "Updates the query in the workbook."
 '
 '   Raises
 '       TODO: Add some data validation to ensure we have a name.
-'       TODO: Set the Formula to an empty query if 
+'       TODO: Set the Formula to an empty query if the text returned nothing.
 
 '   Try to get the query.
     If mQuery Is Nothing Then Set mQuery = GetQuery(Name)
 
-'   Create a new query.
+'   Create a new query if we weren't able to get one.
     If mQuery Is Nothing Then
         Set mQuery = ActiveWorkbook.Queries.Add( _
             Name, _
@@ -149,10 +176,80 @@ End Sub
 
 Private Sub Deserialise()
 Attribute Deserialise.VB_Description = "Parses the Formula into Text."
-'   Parses the Formula into Text.
+'   Parses the Text into a Formula.
+
+'   Set the defaults if we have no Text.
+    If mText = "" Then
+        mFormula = DefaultQuery()
+        mAncestors.RemoveAll()
+        mFormulaDirty = False
+        Exit Function
+    End If
+
+'   Parse the query text.
+    Dim queryLines() As String
+    queryLines = Text.Split(Text, vbNewLine)
+
+    Dim i As Long
+    For i = 0 To UBound(queryLine)
+        Select Case True
+            Case StartsWith(queryLines(i), "// Namespace: "):
+            Case StartsWith(queryLines(i), "// QueryName: "):
+            Case StartsWith(queryLines(i), "// Dependencies: "):
+                i = i + 1
+                Do While StartsWith(queryLines(i), "//  - /")
+                    Dim q As PowerQuery
+                    Set q = New PowerQuery
+                    q.
+                Loop
+        End Select
+    Next i
 
     mFormulaDirty = False
 End Sub
+
+Private Function StartsWith(str As String, subStr As String) As Boolean
+Attribute StartsWith.VB_Description = "Checks str starts with subStr."
+'   Checks str starts with subStr.
+'
+'   Args:
+'       str: The string to check.
+'       subStr: The string to check it starts with.
+'
+'   Returns:
+'       True if str starts with subStr.
+'
+    StartsWith = Left(str, Len(subStr)) = subStr
+End Function
+
+Private Function TextAfter(str As String, subStr As String) As String
+Attribute TextAfter.VB_Description = "Returns the substring after a string."
+'   Returns the substring after a string.
+'
+'   Args:
+'       str: The string to check.
+'       subStr: The string to check it starts with.
+'
+'   Returns:
+'       The part of the string after substring.
+'
+    Dim startPos As Long
+    startPos = Instr(str, subStr)
+    If startPos > 0 Then
+        startPos = startPos + Len(subStr) + 1
+        TextAfter = Mid(str, startPos, Len(str))
+    End If
+End Function
+
+Private Function DefaultQuery() As String
+Attribute DefaultQuery.VB_Description = "A default blank query."
+'   A default blank query.
+    DefaultQuery = _
+        "let" & vbNewLine & _
+        "    Source = """" & vbNewLine & _
+        "in" & vbNewLine & _
+        "    Source"
+End Function
 
 Private Function IsValid() As Boolean
 Attribute IsValid.VB_Description = "Validates the query data."
