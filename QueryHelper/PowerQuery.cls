@@ -213,6 +213,111 @@ Attribute Deserialise.VB_Description = "Parses the Formula into Text."
     mFormulaDirty = False
 End Sub
 
+Public Function GetDependencies(queryRegister As Dictionary) As Dictionary
+Attribute GetDependencies.VB_Description = "Reads the Formula to resolve dependencies."
+'   Reads the Formula to resolve dependencies.
+'
+'   Args:
+'       queryRegister: A register of Repo and WBook queries.
+'
+'   Returns:
+'       A dictionary of queries this query directly depends on.
+'
+    Dim result As New Dictionary
+    result.Add "Repo", New Dictionary
+    result.Add "WBook", New Dictionary
+
+    Dim flagQuotes As Boolean
+    Dim flagLabel As Boolean
+
+    Dim queryLines As Variant
+    queryLines = Split(Formula, vbNewLine)
+
+    Dim queryLine As Variant
+    For Each queryLine In queryLines
+        Dim lineChars() As String
+        lineChars = StringToCharArray(CStr(queryLine))
+
+        Dim pStart As Long
+        pStart = 0
+
+        Dim i As Long
+        For i = 0 To UBound(lineChars)
+            Dim pLen As Long
+            Dim checkLabel As String
+
+            Select Case lineChars(i)
+                Case Is = QUOT:
+                    If flagQuotes And lineChars(i + 1) = QUOT Then
+'                       Escaped quote.                    
+                        i = i + 1
+                    Else
+'                       Unescaped quote, use bitwise Boolean toggle.
+                        flagQuotes = flagQuotes Xor True
+                        If flagLabel Then
+'                           Just closed a label.
+                            pLen = i - pStart + 1
+                            checkLabel = Mid(queryLine, pStart, pLen)
+                            CheckQueryLabel checkLabel, queryRegister, result
+                            pStart = 0
+                            flagLabel = False
+                        End If
+                    End If
+                Case Is = "/"
+'                   Double unquotes forward slash is a comment from there on.
+                    If Not flagQuotes Then              
+                        If lineChars(i + 1) = "/" Then Exit For
+                    End If
+                Case Is = "(", " ", ".", "=", ")"
+'                   Unquoted chars that break a word.
+                    If Not flagQuotes And pStart > 0 Then
+                        pLen = i - pStart + 1
+                        checkLabel = Mid(queryLine, pStart, pLen)
+                        CheckQueryLabel checkLabel, queryRegister, result
+                        pStart = 0
+                    End If
+                Case Is = "#"
+'                   A label can use the format #"My Label"
+                    If Not flagQuotes Then              
+                        If lineChars(i + 1) = QUOT Then
+                            flagLabel = True
+                            i = i + 1
+                            pStart = i + 1
+                        End If
+                    End If
+                Case Else:
+'                   Test any words not in a quoted block.
+                    If pStart = 0 Then pStart = i + 1
+            End Select
+        Next i
+        If pStart > 0 Then
+            pLen = i - pStart + 1
+            checkLabel = Mid(queryLine, pStart, pLen)
+            CheckQueryLabel checkLabel, queryRegister, result
+        End If
+    Next queryLine
+End Function
+
+Private Sub CheckQueryLabel(n As String, q As Dictionary, d As Dictionary)
+Attribute CheckQueryLabel.VB_Description = "Checks if the label is a query and adds to the dependencies."
+'   Checks if the label is a query and adds to the dependencies.
+'
+'   Args:
+'       n: The label name to check.
+'       q: The queries register.
+'       d: The dependencies register.
+'
+    Dim registers() As Variant
+    registers = Array("Repo", "WBook")
+
+    Dim register As Variant
+    For Each register In registers
+        If q(register).Exists(n) And Not d(register).Exists(n) Then
+            d(register).Add n, q(register)(n)
+        End If
+    Next register
+End Sub
+
 Private Function StartsWith(str As String, subStr As String) As Boolean
 Attribute StartsWith.VB_Description = "Checks str starts with subStr."
 '   Checks str starts with subStr.
