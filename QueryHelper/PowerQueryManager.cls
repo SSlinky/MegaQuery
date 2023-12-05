@@ -47,6 +47,7 @@ Option Explicit
 '-------------------------------------------------------------------------------
 Private mRepositoryPath As String
 Private mWorkbookQueries As Dictionary
+Private mRepositoryQueries As Dictionary
 
 
 ' Properties
@@ -117,7 +118,10 @@ End Sub
 Private Sub InitialiseRepositoryRegister()
 Attribute InitialiseRepositoryRegister.VB_Description = "Initialises the local repository tracking."
 '   Initialises the local repository tracking.
+    Set mRepositoryQueries = New Dictionary
 
+    'TODO: Get the repo path and parse it.
+    '       Read it from github directly?
 End Sub
 
 Private Function ReadRepoQuery(filePath As String) As String
