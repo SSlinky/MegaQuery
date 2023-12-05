@@ -37,6 +37,9 @@ Option Explicit
 
 ' Private Backing Store
 '-------------------------------------------------------------------------------
+Private QUOT As String
+Private DBQUOT As String
+
 Private mQuery As WorkbookQuery
 Private mName As String
 Private mDescription As String
@@ -116,6 +119,8 @@ End Property
 ' Constructor
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
+    QUOT = Chr(34)
+    DBQUOT = String(2, QUOT)
     Set mAncestors = New Dictionary
 End Sub
 
@@ -246,7 +251,7 @@ Attribute DefaultQuery.VB_Description = "A default blank query."
 '   A default blank query.
     DefaultQuery = _
         "let" & vbNewLine & _
-        "    Source = """" & vbNewLine & _
+        "    Source = " & DBQUOT & vbNewLine & _
         "in" & vbNewLine & _
         "    Source"
 End Function
@@ -257,7 +262,7 @@ Attribute IsValid.VB_Description = "Validates the query data."
 '
     If Formula = "" Then Formula = _
         "let" & vbNewLine & _
-        "    Source = """" & vbNewLine & _
+        "    Source = " & DBQUOT & vbNewLine & _
         "in" & vbNewLine & _
         "    Source"
     IsValid = Name <> ""
