@@ -227,6 +227,32 @@ Attribute StartsWith.VB_Description = "Checks str starts with subStr."
     StartsWith = Left(str, Len(subStr)) = subStr
 End Function
 
+Private Function StringToCharArray(str As String) As String()
+Attribute StringToCharArray.VB_Description = "Converts a string into an array of single characters."
+'   Converts a string into an array of single characters.
+'
+'   Args:
+'       str: The string to convert.
+'
+'   Returns:
+'       An array of single characters.
+'
+    If Len(str) = 0 Then
+        StringToCharArray = Split("", "")
+        Exit Function
+    End If
+
+    Dim result() As String
+    ReDim result(Len(str) - 1)
+
+    Dim i As Long
+    For i = 1 To Len(str)
+        result(i - 1) = Mid(str, i, 1)
+    Next i
+
+    StringToCharArray = result
+End Function
+
 Private Function TextAfter(str As String, subStr As String) As String
 Attribute TextAfter.VB_Description = "Returns the substring after a string."
 '   Returns the substring after a string.
