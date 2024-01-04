@@ -115,6 +115,14 @@ Public Property Get Namespace() As String
     Namespace = mNamespace
 End Property
 
+Public Property Get Dependencies() As Collection
+Attribute Dependencies.VB_Description = "The names of the dependencies."
+'   The names of the dependencies.
+    Set Dependencies = mDependencies
+End Property
+
+
+
 
 ' Constructor
 '-------------------------------------------------------------------------------
@@ -122,6 +130,7 @@ Private Sub Class_Initialize()
     QUOT = Chr(34)
     DBQUOT = String(2, QUOT)
     Set mAncestors = New Dictionary
+    Set mDependencies = New Collection
 End Sub
 
 
@@ -180,7 +189,7 @@ Attribute Serialise.VB_Description = "Generates the Text from the Formula."
 End Sub
 
 Private Sub Deserialise()
-Attribute Deserialise.VB_Description = "Parses the Formula into Text."
+Attribute Deserialise.VB_Description = "Parses the Text into a Formula."
 '   Parses the Text into a Formula.
 
 '   Set the defaults if we have no Text.
@@ -195,20 +204,25 @@ Attribute Deserialise.VB_Description = "Parses the Formula into Text."
     Dim queryLines() As String
     queryLines = Text.Split(Text, vbNewLine)
 
-    Dim i As Long
-    For i = 0 To UBound(queryLine)
+    Dim queryLine As Variant
+
+    Dim isDepsSection As Boolean
+    For Each queryLine in queryLines
         Select Case True
-            Case StartsWith(queryLines(i), "// Namespace: "):
-            Case StartsWith(queryLines(i), "// QueryName: "):
-            Case StartsWith(queryLines(i), "// Dependencies: "):
-                i = i + 1
-                Do While StartsWith(queryLines(i), "//  - /")
-                    Dim q As PowerQuery
-                    Set q = New PowerQuery
-                    q.
-                Loop
+            Case StartsWith(queryLine, "// Namespace: "):
+                Namespace = TruncStart(queryLine, 14)
+            Case StartsWith(queryLine, "// QueryName: "):
+                Name = TruncStart(queryLine, 14)
+            Case StartsWith(queryLine, "// Dependencies: "):
+                isDepsSection = True
+            Case isDepsSection:
+                If StartsWith(queryLine, "//  - /") Then
+                    Dependencies.Add TruncStart(queryLine, 6)
+                Else
+                    isDepsSection = False
+                End If
         End Select
-    Next i
+    Next queryLine
 
     mFormulaDirty = False
 End Sub
@@ -397,4 +411,23 @@ Attribute IsValid.VB_Description = "Validates the query data."
         "in" & vbNewLine & _
         "    Source"
     IsValid = Name <> ""
+End Function
+
+Private Function TruncStart(str As Variant, n As Long) As String
+Attribute TruncStart.VB_Description = "Removes the first n characters from a string."
+'   Removes the first n characters from a string.
+'
+'   Args:
+'       str: The string to truncate.
+'       n: The number of characters to truncate.
+'
+'   Returns:
+'       A shorter string.
+'
+    If n <= 0 Then
+        TruncStart = str
+        Exit Function
+    End If
+
+    TruncStart = Right(str, Len(str) - n)
 End Function
