@@ -102,6 +102,25 @@ Attribute PruneQueries.VB_Description = "Prunes all queries not an ancestor of t
     ' Maybe add some smarts to delete orphaned list objects / sheets.    
 End Sub
 
+Public Sub AddRepositoryQuery(queryName As String)
+Attribute AddRepositoryQuery.VB_Description = "Adds a query and its dependencies from the repository."
+'   Adds a query and its dependencies from the repository.
+'
+'   Args:
+'       queryName: The fully qualified name of the query.
+'
+'   Raises:
+'       QueryNotFound error when the query does not exist.
+'
+    If Not mRepositoryQueries.Exists(queryName) Then
+        ' raise exception
+        Exit Sub
+    End If
+
+    Set 
+    
+End Sub
+
 
 ' Helpers
 '-------------------------------------------------------------------------------

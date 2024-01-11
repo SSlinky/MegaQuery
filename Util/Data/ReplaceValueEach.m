@@ -6,7 +6,7 @@
 // Namespace: /Util/Data
 // QueryName: ReplaceValueEach
 // Dependencies:
-//  - /Util/DataApplyColumnTypes
+//  - /Util/Data/ApplyColumnTypes
 
 (tbl as table, replacer as function, fieldNames as list) as table =>
 // Value replacement applied to multiple columns that maintains original types.

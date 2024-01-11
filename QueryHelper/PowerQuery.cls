@@ -3,29 +3,29 @@ BEGIN
   MultiUse = -1  'True
 END
 Attribute VB_Name = "PowerQuery"
-Attribute VB_Description = "Wrapper for a Workbookquery with some extended functionality."
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Attribute VB_Description = "Wrapper for a Workbookquery with some extended functionality."
 ' Copyright 2023 Sam Vanderslink
-' 
-' Permission is hereby granted, free of charge, to any person obtaining a copy 
-' of this software and associated documentation files (the "Software"), to deal 
-' in the Software without restriction, including without limitation the rights 
-' to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-' copies of the Software, and to permit persons to whom the Software is 
+'
+' Permission is hereby granted, free of charge, to any person obtaining a copy
+' of this software and associated documentation files (the "Software"), to deal
+' in the Software without restriction, including without limitation the rights
+' to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+' copies of the Software, and to permit persons to whom the Software is
 ' furnished to do so, subject to the following conditions:
-' 
-' The above copyright notice and this permission notice shall be included in 
+'
+' The above copyright notice and this permission notice shall be included in
 ' all copies or substantial portions of the Software.
-' 
-' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-' IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-' FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-' AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-' LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-' FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+'
+' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+' IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+' FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+' AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+' LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+' FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 ' IN THE SOFTWARE.
 
 Option Explicit
@@ -42,8 +42,10 @@ Private DBQUOT As String
 
 Private mQuery As WorkbookQuery
 Private mName As String
+Private mNamespace As String
 Private mDescription As String
 Private mAncestors As Dictionary
+Private mDependencies As Collection
 
 Private mText As String
 Private mTextDirty As Boolean
@@ -156,7 +158,7 @@ Attribute Update.VB_Description = "Updates the query in the workbook."
         Exit Sub
     End If
 
-'   Update the existing query.    
+'   Update the existing query.
     With mQuery
         .Name = Name
         .Description = Description
@@ -195,28 +197,35 @@ Attribute Deserialise.VB_Description = "Parses the Text into a Formula."
 '   Set the defaults if we have no Text.
     If mText = "" Then
         mFormula = DefaultQuery()
-        mAncestors.RemoveAll()
+        mAncestors.RemoveAll
         mFormulaDirty = False
-        Exit Function
+        Exit Sub
     End If
 
-'   Parse the query text.
+'   Parse the query text - try splitting on
+'   the common line endings.
     Dim queryLines() As String
-    queryLines = Text.Split(Text, vbNewLine)
-
+    queryLines = Split(Text, vbNewLine)
+    If UBound(queryLines) = 0 Then
+        queryLines = Split(Text, Chr(10))
+    End If
+    If UBound(queryLines) = 0 Then
+        queryLines = Split(Text, Chr(13))
+    End If
+    
     Dim queryLine As Variant
 
     Dim isDepsSection As Boolean
-    For Each queryLine in queryLines
+    For Each queryLine In queryLines
         Select Case True
-            Case StartsWith(queryLine, "// Namespace: "):
+            Case StartsWith(CStr(queryLine), "// Namespace: "):
                 Namespace = TruncStart(queryLine, 14)
-            Case StartsWith(queryLine, "// QueryName: "):
+            Case StartsWith(CStr(queryLine), "// QueryName: "):
                 Name = TruncStart(queryLine, 14)
-            Case StartsWith(queryLine, "// Dependencies: "):
+            Case StartsWith(CStr(queryLine), "// Dependencies: "):
                 isDepsSection = True
             Case isDepsSection:
-                If StartsWith(queryLine, "//  - /") Then
+                If StartsWith(CStr(queryLine), "//  - /") Then
                     Dependencies.Add TruncStart(queryLine, 6)
                 Else
                     isDepsSection = False
@@ -224,12 +233,13 @@ Attribute Deserialise.VB_Description = "Parses the Text into a Formula."
         End Select
     Next queryLine
 
+    mFormula = mText
     mFormulaDirty = False
 End Sub
 
-Public Function GetDependencies(queryRegister As Dictionary) As Dictionary
-Attribute GetDependencies.VB_Description = "Reads the Formula to resolve dependencies."
-'   Reads the Formula to resolve dependencies.
+Public Function GetAncestors(queryRegister As Dictionary) As Dictionary
+Attribute GetAncestors.VB_Description = "Reads the Formula to resolve ancestors."
+'   Reads the Formula to resolve ancestors.
 '
 '   Args:
 '       queryRegister: A register of Repo and WBook queries.
@@ -263,7 +273,7 @@ Attribute GetDependencies.VB_Description = "Reads the Formula to resolve depende
             Select Case lineChars(i)
                 Case Is = QUOT:
                     If flagQuotes And lineChars(i + 1) = QUOT Then
-'                       Escaped quote.                    
+'                       Escaped quote.
                         i = i + 1
                     Else
 '                       Unescaped quote, use bitwise Boolean toggle.
@@ -279,7 +289,7 @@ Attribute GetDependencies.VB_Description = "Reads the Formula to resolve depende
                     End If
                 Case Is = "/"
 '                   Double unquotes forward slash is a comment from there on.
-                    If Not flagQuotes Then              
+                    If Not flagQuotes Then
                         If lineChars(i + 1) = "/" Then Exit For
                     End If
                 Case Is = "(", " ", ".", "=", ")"
@@ -292,7 +302,7 @@ Attribute GetDependencies.VB_Description = "Reads the Formula to resolve depende
                     End If
                 Case Is = "#"
 '                   A label can use the format #"My Label"
-                    If Not flagQuotes Then              
+                    If Not flagQuotes Then
                         If lineChars(i + 1) = QUOT Then
                             flagLabel = True
                             i = i + 1
@@ -310,6 +320,8 @@ Attribute GetDependencies.VB_Description = "Reads the Formula to resolve depende
             CheckQueryLabel checkLabel, queryRegister, result
         End If
     Next queryLine
+
+    Set GetAncestors = result
 End Function
 
 Private Sub CheckQueryLabel(n As String, q As Dictionary, d As Dictionary)
@@ -384,7 +396,7 @@ Attribute TextAfter.VB_Description = "Returns the substring after a string."
 '       The part of the string after substring.
 '
     Dim startPos As Long
-    startPos = Instr(str, subStr)
+    startPos = InStr(str, subStr)
     If startPos > 0 Then
         startPos = startPos + Len(subStr) + 1
         TextAfter = Mid(str, startPos, Len(str))

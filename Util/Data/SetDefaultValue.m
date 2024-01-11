@@ -6,7 +6,7 @@
 // Namespace: /Util/Data
 // QueryName: SetDefaultValue
 // Dependencies:
-//  - /Util/DataApplyColumnTypes
+//  - /Util/Data/ApplyColumnTypes
 
 (tbl as table, value as any, fieldNames as list) as table =>
 // Replaces null values in a list of fields with the passed in value.

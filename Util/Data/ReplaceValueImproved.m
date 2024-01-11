@@ -6,7 +6,7 @@
 // Namespace: /Util/Data
 // QueryName: ReplaceValueImproved
 // Dependencies:
-//  - /Util/DataApplyColumnTypes
+//  - /Util/Data/ApplyColumnTypes
 
 (tbl as table, value as function, replacer as function, fieldNames as list) as table =>
 // Shorthand value replacement that maintains original types.
