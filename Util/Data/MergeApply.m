@@ -76,7 +76,7 @@ let
             Table.ReplaceValue(
                 src,
                 each Record.Field(_, mt),
-                each {mt, mf},
+                each {rf(_, mt), rf(_, mf)},
                 Replacer.ReplaceValue,
                 {mt}
             ),
