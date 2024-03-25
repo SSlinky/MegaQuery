@@ -27,7 +27,7 @@ let
     // Helper function to parse the URL into its component parts.  
     parseUrlStaging = (url as text) as table => let
         // Create a table to work with the decoded URL.
-        workingTable = #table({"baseUrl"}, {{decodeUrl(StripUrlArgs(url))}}),
+        workingTable = #table({"baseUrl"}, {{DecodeUrl(StripUrlArgs(url))}}),
 
         // Remove https:// from the start of the url.
         removeProtocol = Table.TransformColumns(
