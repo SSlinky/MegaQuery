@@ -7,7 +7,7 @@
 // QueryName: SharePointDirectory
 // Dependencies:
 //  - /Util/String/DecodeUrl
-//  - /Util/String/parseSharePointUrl
+//  - /Util/String/ParseSharePointUrl
 
 // Paste the full SharePoint URL directly from the browser. Sign in may be required.
 (sharePointUrl as text) as table =>
@@ -24,7 +24,7 @@ let
     optionImportSubdirectories = false,
 
     // Parses the URL to return {company, team, file path}
-    parsedUrl = parseSharePointUrl(sharePointUrl),
+    parsedUrl = ParseSharePointUrl(sharePointUrl),
     // Builds the base SharePoint URL.
     baseUrl = Text.Format("https://#{0}.sharepoint.com/sites/#{1}/", parsedUrl),
     // Extracts the path from the parse results.
