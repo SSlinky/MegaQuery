@@ -121,6 +121,21 @@ Attribute AddRepositoryQuery.VB_Description = "Adds a query and its dependencies
     
 End Sub
 
+Public Sub WriteQueries()
+Attribute WriteQueries.VB_Description = "Writes the queries to a repo."
+'   Writes the queries to a repo.
+'
+'   Args:
+'       param1:
+'
+'   Raises:
+'
+    Dim q As PowerQuery
+    For Each q In mWorkbookQueries
+        
+    Next q
+End Sub
+
 
 ' Helpers
 '-------------------------------------------------------------------------------
