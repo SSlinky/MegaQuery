@@ -86,7 +86,7 @@ Attribute PruneQueries.VB_Description = "Prunes all queries not an ancestor of t
     Dim queryName As Variant
     Dim pq As PowerQuery
     For Each queryName In queryNames
-        If Not mWorkbookQueries.Exists Then
+        If Not mWorkbookQueries.Exists(queryName) Then
             Err.Raise vbObjectError + 2, "Query not found: " & queryName
         End If
         Set pq = New PowerQuery
@@ -128,7 +128,7 @@ Private Sub InitialiseWorkbookRegister()
 Attribute InitialiseWorkbookRegister.VB_Description = "Initialises the workbook query tracking."
 '   Initialises the workbook query tracking.
     Set mWorkbookQueries = New Dictionary
-    Dim q As Query
+    Dim q As WorkbookQuery
     For Each q In ActiveWorkbook.Queries
         mWorkbookQueries.Add q.Name, q
     Next q
