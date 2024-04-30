@@ -106,7 +106,6 @@ Attribute Ancestors.VB_Description = "Gets this query's dependencies."
     Set Ancestors = mAncestors
 End Property
 
-Private mNamespace As String
 Public Property Let Namespace(var As String)
 Attribute Namespace.VB_Description = "The query's folder path."
 '   The query's folder path.
@@ -122,8 +121,6 @@ Attribute Dependencies.VB_Description = "The names of the dependencies."
 '   The names of the dependencies.
     Set Dependencies = mDependencies
 End Property
-
-
 
 
 ' Constructor
