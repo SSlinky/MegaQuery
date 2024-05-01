@@ -3,7 +3,7 @@ BEGIN
   MultiUse = -1  'True
 END
 Attribute VB_Name = "GitRepo"
-Attribute VB_Description = "Makes use of the Github API to pull directly form the online repository."
+Attribute VB_Description = "Makes use of the Github API to pull directly from the online repository."
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -32,7 +32,7 @@ Option Explicit
 
 '-------------------------------------------------------------------------------
 '   Class: GitRepo
-'   Makes use of the Github API to pull directly form the online repository.
+'   Makes use of the Github API to pull directly from the online repository.
 '-------------------------------------------------------------------------------
 
 ' Enums
