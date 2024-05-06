@@ -1,3 +1,6 @@
 [submodule "VBA-ExtendedDictionary"]
 	path = VBA-ExtendedDictionary
 	url = https://github.com/SSlinky/VBA-ExtendedDictionary
+[submodule "VBA-List"]
+	path = VBA-List
+	url = https://github.com/SSlinky/VBA-List
