@@ -68,7 +68,10 @@ Public Property Get Source() As Variant
 End Property
 
 Public Property Set Source(var As Variant)
-' if not a workbook, throw.
+    If Not TypeName(mSource) = "Workbook" Then
+        Logger.Throw New InvalidSourceException
+        Exit Property
+    End If
     Set mSource = var
 End Property
 
