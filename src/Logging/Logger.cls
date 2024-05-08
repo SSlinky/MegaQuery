@@ -35,18 +35,6 @@ Option Explicit
 '   A basic logger.
 '-------------------------------------------------------------------------------
 
-' Enums
-'-------------------------------------------------------------------------------
-Public Enum LoggerLevelCode
-    LLDebug
-    LLInfo
-    LLWarn
-    LLError
-    LLCritical
-    LLNone
-End Enum
-
-
 ' Private Backing Store
 '-------------------------------------------------------------------------------
 Private mLoggerLevelCode As LoggerLevelCode
