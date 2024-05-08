@@ -37,26 +37,26 @@ Option Explicit
 
 ' Private Backing Store
 '-------------------------------------------------------------------------------
-Private mLoggerLevelCode As LoggerLevelCode
+Private mLevel As LoggerLevelCode
 
 
 ' Properties
 '-------------------------------------------------------------------------------
-Public Property Let LoggerLevelCode(var As LoggerLevelCode)
-Attribute LoggerLevelCode.VB_Description = "The logger level."
+Public Property Let Level(var As LoggerLevelCode)
+Attribute Level.VB_Description = "The logger level."
 '   The logger level.
-    mLoggerLevelCode = var
+    mLevel = var
 End Property
 
-Public Property Get LoggerLevelCode() As LoggerLevelCode
-    LoggerLevelCode = mLoggerLevelCode
+Public Property Get Level() As LoggerLevelCode
+    Level = mLevel
 End Property
 
 
 ' Constructor
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
-    LoggerLevelCode = LoggerLevelCode.LLNone
+    Level = LoggerLevelCode.LLNone
 End Sub
 
 
@@ -70,7 +70,7 @@ Attribute Log.VB_Description = "Logs the message if it meets the LoggerLevelCode
 '       level: The logger level.
 '       msg: The text to log.
 '
-    If level < LoggerLevelCode Then Exit Sub
+    If level < Level Then Exit Sub
     Debug.Print LoggerLevelLabel(level) & msg
 End Sub
 

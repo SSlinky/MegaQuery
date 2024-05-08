@@ -145,12 +145,12 @@ Attribute SyncFromSource.VB_Description = "Syncs properties from the source."
     Set mDependencies = Nothing
 End Sub
 
-Public Sub ParseFormula(val As String)
+Public Sub ParseFormula(var As String)
 Attribute ParseFormula.VB_Description = "Parses a query formula into its components."
 '   Parses a query formula into its components.
 '
 '   Args:
-'       val: The query formula to parse.
+'       var: The query formula to parse.
 '
 '   Raises:
 '
@@ -172,7 +172,7 @@ Attribute ResolveDependencies.VB_Description = "Parses the formula to resolve na
     Set mDependencies = New Collection
     If mFormula = "" Then Exit Sub
     
-    Dim toks As String()
+    Dim toks() As String
     toks = FormulaTokens()
 
     Dim tok As Variant
@@ -233,7 +233,7 @@ Attribute Deserialise.VB_Description = "Deserialises the formula into properties
     Next queryLine
 
 '   Repack the description (if we have one) and formula into string.
-    ql.FromStringCollection(result.GetValue("description"), vbNewLine)
+    ql.FromStringCollection result.GetValue("description"), vbNewLine
     result("description") = ql
 
     ql.FromStringCollection result.GetValue("formula"), vbNewLine
@@ -247,14 +247,14 @@ Attribute FormulaTokens.VB_Description = "Returns the formula as a series of tok
 '   Returns the formula as a series of tokens.
 '
 '   TODO: Smarter line endings (make it part of XString).
-    Dim fLines As String()
+    Dim fLines() As String
     fLines = Split(mFormula, vbNewLine)
 
     Dim toks As New Collection
     Dim fLine As Variant
     For Each fLine In fLines
-        Dim fWords As String()
-        fWords = GetWords(fLine)
+        Dim fWords() As String
+        fWords = GetWords(CStr(fLine))
 
         Dim fWord As Variant
         For Each fWord In fWords
@@ -262,7 +262,7 @@ Attribute FormulaTokens.VB_Description = "Returns the formula as a series of tok
         Next fWord
     Next fLine
 
-    Dim result As String()
+    Dim result() As String
     ReDim result(1 To toks.Count)
     Dim i As Long
     For i = 1 To toks.Count
@@ -370,6 +370,7 @@ Attribute CharIsDelimiter.VB_Description = "True if the character is a delimiter
         If c = CStr(d) Then
             CharIsDelimiter = True
             Exit Function
+        End If
     Next d
 End Function
 
