@@ -65,7 +65,7 @@ End Property
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
     Set mRepositories = New List
-    mRepositories.Push New WorkbookRepository
+    mRepositories.Push New WorkbookPowerQueryRepository
 End Sub
 
 

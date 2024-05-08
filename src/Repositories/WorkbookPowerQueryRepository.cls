@@ -32,7 +32,7 @@ Option Explicit
 Implements IPowerQueryRepository
 
 '-------------------------------------------------------------------------------
-'   Class: WorkbookRepository
+'   Class: WorkbookPowerQueryRepository
 '   A PowerQuery repository attached to an Excel workbook.
 '-------------------------------------------------------------------------------
 
