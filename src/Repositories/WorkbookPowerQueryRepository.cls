@@ -118,7 +118,7 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
     
     Dim queryName As Variant
     For Each queryName In baseQueries
-        AddAncestors keepQueries, queryName
+        ResolveAncestors keepQueries, queryName
     Next queryName
 
 '   Prune the queries we aren't keeping.
@@ -136,8 +136,8 @@ End Sub
 
 ' Helpers
 '-------------------------------------------------------------------------------
-Private Sub AddAncestors(d As Dictionary, queryName As String)
-Attribute AddAncestors.VB_Description = "Recursively adds ancestors to the dictionary."
+Private Sub ResolveAncestors(d As Dictionary, queryName As Variant)
+Attribute ResolveAncestors.VB_Description = "Recursively adds ancestors to the dictionary."
 '   Recursively adds ancestors to the dictionary.
 '
 '   Args:
@@ -148,10 +148,10 @@ Attribute AddAncestors.VB_Description = "Recursively adds ancestors to the dicti
     Set q = Queries(queryName)
 
     Dim queryDependency As Variant
-    For Each queryDependency In q.Ancestors
+    For Each queryDependency In q.Dependencies
         If Not d.Exists(queryDependency) Then
             d.Add queryDependency, Queries(queryDependency)
-            AddAncestors d, queryDependency
+            ResolveAncestors d, queryDependency
         End If
     Next queryDependency
 End Sub
