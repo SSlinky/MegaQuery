@@ -38,7 +38,7 @@ Option Explicit
 
 ' Properties
 '-------------------------------------------------------------------------------
-Public Property Get Level() As LoggerLevel
+Public Property Get Level() As LoggerLevelCode
 Attribute Level.VB_Description = "The exception level."
     Logger.Throw New InterfaceNotClassException
 End Property

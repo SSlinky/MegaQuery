@@ -38,51 +38,51 @@ Option Explicit
 ' Enums
 '-------------------------------------------------------------------------------
 Public Enum LoggerLevelCode
-    Debug
-    Info
-    Warn
-    Error
-    Critical
-    None
+    LLDebug
+    LLInfo
+    LLWarn
+    LLError
+    LLCritical
+    LLNone
 End Enum
 
 
 ' Private Backing Store
 '-------------------------------------------------------------------------------
-Private mLoggerLevel As LoggerLevelCode
+Private mLoggerLevelCode As LoggerLevelCode
 
 
 ' Properties
 '-------------------------------------------------------------------------------
-Public Property Let LoggerLevel(var As LoggerLevelCode)
-Attribute LoggerLevel.VB_Description = "The logger level."
+Public Property Let LoggerLevelCode(var As LoggerLevelCode)
+Attribute LoggerLevelCode.VB_Description = "The logger level."
 '   The logger level.
-    mLoggerLevel = var
+    mLoggerLevelCode = var
 End Property
 
-Public Property Get LoggerLevel() As LoggerLevelCode
-    LoggerLevel = mLoggerLevel
+Public Property Get LoggerLevelCode() As LoggerLevelCode
+    LoggerLevelCode = mLoggerLevelCode
 End Property
 
 
 ' Constructor
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
-    LoggerLevel = LoggerLevelCode.None
+    LoggerLevelCode = LoggerLevelCode.LLNone
 End Sub
 
 
 ' Methods
 '-------------------------------------------------------------------------------
 Public Sub Log(level As LoggerLevelCode, msg As String)
-Attribute Log.VB_Description = "Logs the message if it meets the LoggerLevel."
-'   Logs the message if it meets the LoggerLevel.
+Attribute Log.VB_Description = "Logs the message if it meets the LoggerLevelCode."
+'   Logs the message if it meets the LoggerLevelCode.
 '
 '   Args:
 '       level: The logger level.
 '       msg: The text to log.
 '
-    If level < LoggerLevel Then Exit Sub
+    If level < LoggerLevelCode Then Exit Sub
     Debug.Print LoggerLevelLabel(level) & msg
 End Sub
 
@@ -98,7 +98,7 @@ Attribute Throw.VB_Description = "Throws and/or logs an exception."
 '       e
 '
     Log e.Level, Iif(src = "", "", "[" & src & "]") & e.Description
-    If e.Level >= LoggerLevelCode.Error Then e.Raise src
+    If e.Level >= LoggerLevelCode.LLError Then e.Raise src
 End Sub
 
 
@@ -115,17 +115,15 @@ Attribute LoggerLevelLabel.VB_Description = "Returns a label for the logger leve
 '       A logger lable.
 '
     Select Case level
-        Case Is = LoggerLevelCode.Debug:
+        Case Is = LoggerLevelCode.LLDebug:
             LoggerLevelLabel = "DEBG: "
-        Case Is = LoggerLevelCode.Info:
+        Case Is = LoggerLevelCode.LLInfo:
             LoggerLevelLabel = "INFO: "
-        Case Is = LoggerLevelCode.Warn:
+        Case Is = LoggerLevelCode.LLWarn:
             LoggerLevelLabel = "WARN: "
-        Case Is = LoggerLevelCode.Critical:
+        Case Is = LoggerLevelCode.LLCritical:
             LoggerLevelLabel = "CRIT: "
         Case Else:
             LoggerLevelLabel = "****: "
     End Select
-
-    LevelTag = result
 End Function

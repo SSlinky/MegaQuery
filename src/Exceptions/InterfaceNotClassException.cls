@@ -2,8 +2,8 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "IException"
-Attribute VB_Description = "An interface describing an exception."
+Attribute VB_Name = "InterfaceNotClassException"
+Attribute VB_Description = "Interface is not a Class Exception."
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -32,18 +32,18 @@ Option Explicit
 Implements IException
 
 '-------------------------------------------------------------------------------
-'   Class: IException
+'   Class: InterfaceNotClassException
 '   An interface describing an exception.
 '-------------------------------------------------------------------------------
 
 ' Properties
 '-------------------------------------------------------------------------------
-Private Const LOGLVL As Long = LoggerLevel.Critical
+Private Const LOGLVL As Long = LoggerLevelCode.LLCritical
 Private Const ERRNUM As Long = 1
 Private Const ERRDESC As String = _
     "Cannot create an instance of the abstract class or interface."
 
-Public Property Get Level() As LoggerLevel
+Public Property Get Level() As LoggerLevelCode
 Attribute Level.VB_Description = "The exception level."
 '   The exception level.
     Level = LOGLVL
@@ -86,6 +86,11 @@ End Sub
 
 ' Interface Implementation
 '-------------------------------------------------------------------------------
+Public Property Get IException_Level() As LoggerLevelCode
+Attribute IException_Level.VB_Description = "The exception level."
+    IException_Level = Level
+End Property
+
 Public Property Get IException_Number() As Long
 Attribute IException_Number.VB_Description = "The error number with vbObjectError added."
     IException_Number = Number
