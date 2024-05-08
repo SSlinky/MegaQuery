@@ -73,6 +73,7 @@ Public Property Set Source(var As Variant)
         Exit Property
     End If
     Set mSource = var
+    SyncFromSource
 End Property
 
 
@@ -153,6 +154,22 @@ Attribute AddAncestors.VB_Description = "Recursively adds ancestors to the dicti
             AddAncestors d, queryDependency
         End If
     Next queryDependency
+End Sub
+
+Private Sub SyncFromSource()
+Attribute SyncFromSource.VB_Description = "Sets up the queries from the source."
+'   Sets up the queries from the source.
+'
+    Set mQueries = New Dictionary
+
+    Dim pq As PowerQuery
+    Dim wq As WorkbookQuery
+
+    For Each wq In mSource.Queries
+        Set pq = New PowerQuery
+        Set pq.Source = wq
+        mQueries.Add wq.Name, pq
+    Next wq
 End Sub
 
 
