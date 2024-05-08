@@ -99,7 +99,7 @@ Attribute AfterDelimiter.VB_Description = "Returns the substring after a string.
     Dim startPos As Long
     startPos = IndexOf(subStr)
     If startPos > 0 Then
-        startPos = startPos + Len(subStr) + 1
+        startPos = startPos + Len(subStr)
         AfterDelimiter = Mid(mValue, startPos, Len(mValue))
     End If
 End Function

@@ -68,7 +68,7 @@ Public Property Get Source() As Variant
 End Property
 
 Public Property Set Source(var As Variant)
-    If Not TypeName(mSource) = "Workbook" Then
+    If Not TypeName(var) = "Workbook" Then
         Logger.Throw New InvalidSourceException
         Exit Property
     End If
@@ -168,6 +168,7 @@ Attribute SyncFromSource.VB_Description = "Sets up the queries from the source."
     For Each wq In mSource.Queries
         Set pq = New PowerQuery
         Set pq.Source = wq
+        pq.SyncFromSource
         mQueries.Add wq.Name, pq
     Next wq
 End Sub

@@ -134,15 +134,9 @@ Public Sub SyncFromSource()
 Attribute SyncFromSource.VB_Description = "Syncs properties from the source."
 '   Syncs properties from the source.
 '
-'   Resolve from source formula.
-    Dim meta As Dictionary
-    Set meta = Deserialise(mSource.Formula)
-
-'   Apply metadata.
-    Name = mSource.Name
-    Namespace = meta.GetValue("namespace", "")
-    Description = meta.GetValue("description", "")
+    ParseFormula mSource.Formula
     Set mDependencies = Nothing
+    Logger.Log LLDebug, "Resetting deps [" & Name & "]"
 End Sub
 
 Public Sub ParseFormula(var As String)
@@ -151,8 +145,6 @@ Attribute ParseFormula.VB_Description = "Parses a query formula into its compone
 '
 '   Args:
 '       var: The query formula to parse.
-'
-'   Raises:
 '
     Dim queryParts As Dictionary
     Set queryParts = Deserialise(var)
@@ -195,6 +187,8 @@ Attribute Deserialise.VB_Description = "Deserialises the formula into properties
 '       A dictionary of query components.
 '
     Dim result As New Dictionary
+    result.Add "formula", New Collection
+    result.Add "description", New Collection
 
 '   Parse the query text - try splitting on
 '   the common line endings.
@@ -206,29 +200,42 @@ Attribute Deserialise.VB_Description = "Deserialises the formula into properties
     If UBound(queryLines) = 0 Then
         queryLines = Split(fText, vbCr)
     End If
+
+    Dim s As Long
+'   Store the parser state as bit flags.
+'       0 = Above formula.
+'       1 = Inside formula section
+'       2 = Inside description section
     
     Dim ql As New XString
     Dim queryLine As Variant
     For Each queryLine In queryLines
         ql = Trim(queryLine)
-        Dim isFormulaSection As Boolean
         Select Case True
+'           Parse as formula.                
+            Case s = 1:
+                result("formula").Add CStr(queryLine)
 '           Skip blank lines.        
             Case ql = "":
 '           Detect namespace.            
-            Case ql.StartsWith("// Namespace: "):
+            Case s = 0 And ql.StartsWith("// Namespace: "):
                 result.Add "namespace", ql.AfterDelimiter("// Namespace: ")
 '           Detect query name.                
-            Case ql.StartsWith("// QueryName: "):
+            Case s = 0 And ql.StartsWith("// QueryName: "):
                 result.Add "name", ql.AfterDelimiter("// QueryName: ")
-'           Detect query description.                
-            Case isFormulaSection And ql.StartsWith("//"):
-                result.GetValue("description", New Collection).Add ql.Value
+'           Ignore comments above query.
+            Case s = 0 And ql.StartsWith("//"):
+'           Detect start of forumula            
+            Case s = 0:
+                result("formula").Add CStr(queryLine)
+                s = 2
+            Case s = 2 And ql.StartsWith("//"):
 '           Not a comment and not a blank line.
-            Case isFormulaSection:
-                result.GetValue("formula", New Collection).Add ql.Value
+                result("description").Add CStr(queryLine)
+'           Anything else means we're past the description.            
             Case Else:
-                isFormulaSection = True
+                result("formula").Add CStr(queryLine)
+                s = 1
         End Select
     Next queryLine
 
@@ -290,12 +297,12 @@ Attribute GetWords.VB_Description = "Converts a query line into a string array o
         Exit Function
     End If
 
+    Dim s As Long
 '   Store the parser state as bit flags.
 '       1 = Hash
 '       2 = Quote
 '       4 = Comment
 
-    Dim s As Long
     Dim p As Long
     Dim i As Long
     Dim c As String * 1
@@ -313,7 +320,9 @@ Attribute GetWords.VB_Description = "Converts a query line into a string array o
                 s = 4
 '           Second slash detected outside a string.        
             Case c = "/" And ((s And 2) = 0) And ((s And 4) = 4):
-                p = i
+                i = i - 2
+                AddWord var, r, p, i
+                i = Len(var)
                 Exit For
 '           Quote detected while string.                
             Case c = QUOT And ((s And 2) = 2):
@@ -366,7 +375,7 @@ Attribute CharIsDelimiter.VB_Description = "True if the character is a delimiter
 '   True if the character is a delimiter.
 '
     Dim d As Variant
-    For Each d In Split("(\)\,", "\")
+    For Each d In Split("(\)\{\}\,", "\")
         If c = CStr(d) Then
             CharIsDelimiter = True
             Exit Function
