@@ -104,13 +104,15 @@ Attribute LoggerLevelLabel.VB_Description = "Returns a label for the logger leve
 '
     Select Case level
         Case Is = LoggerLevelCode.LLDebug:
-            LoggerLevelLabel = "DEBG: "
+            LoggerLevelLabel = "D: "
         Case Is = LoggerLevelCode.LLInfo:
-            LoggerLevelLabel = "INFO: "
+            LoggerLevelLabel = "I: "
         Case Is = LoggerLevelCode.LLWarn:
-            LoggerLevelLabel = "WARN: "
+            LoggerLevelLabel = "W: "
+        Case Is = LoggerLevelCode.LLError:
+            LoggerLevelLabel = "E:  "
         Case Is = LoggerLevelCode.LLCritical:
-            LoggerLevelLabel = "CRIT: "
+            LoggerLevelLabel = "C: "
         Case Else:
             LoggerLevelLabel = "****: "
     End Select
