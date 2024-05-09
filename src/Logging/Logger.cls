@@ -147,6 +147,56 @@ Attribute Throw.VB_Description = "Throws and/or logs an exception."
     End If
 End Sub
 
+Public Sub Debug(msg As String)
+Attribute Debug.VB_Description = "Logs a Debug message."
+'   Logs a Debug message.
+'
+'   Args:
+'       msg: The text to log.
+'
+    Log LLDebug, msg
+End Sub
+
+Public Sub Info(msg As String)
+Attribute Info.VB_Description = "Logs an Info message."
+'   Logs an Info message.
+'
+'   Args:
+'       msg: The text to log.
+'
+    Log LLInfo, msg
+End Sub
+
+Public Sub Warn(msg As String)
+Attribute Warn.VB_Description = "Logs a Warn message."
+'   Logs a Warn message.
+'
+'   Args:
+'       msg: The text to log.
+'
+    Log LLWarn, msg
+End Sub
+
+Public Sub Error(msg As String)
+Attribute Error.VB_Description = "Logs an Error message."
+'   Logs an Error message.
+'
+'   Args:
+'       msg: The text to log.
+'
+    Log LLError, msg
+End Sub
+
+Public Sub Critical(msg As String)
+Attribute Critical.VB_Description = "Logs a Critical message."
+'   Logs a Critical message.
+'
+'   Args:
+'       msg: The text to log.
+'
+    Log LLCritical, msg
+End Sub
+
 
 ' Helpers
 '-------------------------------------------------------------------------------

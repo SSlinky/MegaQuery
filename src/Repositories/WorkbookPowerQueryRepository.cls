@@ -112,7 +112,7 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
 '   Determine which queries to keep.
     Dim baseQueries As Variant
     baseQueries = Iif(TypeName(Index) = "String", Array(Index), Index)
-    Logger.Log LLInfo, "Pruning queries from [" & Join(baseQueries, ",") & "]"
+    Logger.Info "Pruning queries from [" & Join(baseQueries, ",") & "]"
 
     Dim keepQueries As Dictionary
     Set keepQueries = New Dictionary
@@ -134,7 +134,7 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
     Dim q As WorkbookQuery
     For Each q In mSource.Queries
         If Not keepQueries.Exists(q.Name) Then
-            Logger.Log LLInfo, "Deleting [" & q.Name & "]"
+            Logger.Info "Deleting [" & q.Name & "]"
             ' q.Delete
         End If
     Next q
@@ -175,7 +175,7 @@ Private Sub SyncFromSource()
 Attribute SyncFromSource.VB_Description = "Sets up the queries from the source."
 '   Sets up the queries from the source.
 '
-    Logger.Log LLInfo, "Synchronising to source [" & Source.Name & "]"
+    Logger.Info "Synchronising to source [" & Source.Name & "]"
     Set mQueries = New Dictionary
 
     Dim pq As PowerQuery

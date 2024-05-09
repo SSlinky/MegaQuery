@@ -134,14 +134,14 @@ Public Sub SyncFromSource()
 Attribute SyncFromSource.VB_Description = "Syncs properties from the source."
 '   Syncs properties from the source.
 '
-    Logger.Log LLDebug, "Parsing formula [" & mSource.Name & "]"
+    Logger.Debug "Parsing formula [" & mSource.Name & "]"
 
     Name = mSource.Name
     ParseFormula mSource.Formula
 
     If Not mDependencies Is Nothing Then
         Set mDependencies = Nothing
-        Logger.Log LLWarn, "Resetting deps [" & Name & "]"
+        Logger.Warn "Resetting deps [" & Name & "]"
     End IF
 End Sub
 
@@ -167,7 +167,7 @@ Attribute ResolveDependencies.VB_Description = "Parses the formula to resolve na
 '   Args:
 '       names: A dictionary of query names.
 '
-    Logger.Log LLDebug, "Resolving dependencies [" & Name & "]"
+    Logger.Debug "Resolving dependencies [" & Name & "]"
     Set mDependencies = New Collection
     If mFormula = "" Then Exit Sub
     
@@ -180,11 +180,11 @@ Attribute ResolveDependencies.VB_Description = "Parses the formula to resolve na
         s = StripQueryName(tok)
         If names.Exists(s) Then
             mDependencies.Add s
-            Logger.Log LLDebug, "  Added " & s
+            Logger.Debug "  Added " & s
         End If
     Next tok
 
-    If mDependencies.Count = 0 Then Logger.Log LLDebug, "  None"
+    If mDependencies.Count = 0 Then Logger.Debug "  None"
 End Sub
 
 
