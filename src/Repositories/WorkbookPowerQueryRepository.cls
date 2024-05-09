@@ -114,7 +114,7 @@ Attribute AddTree.VB_Description = "Adds a query tree to the repository."
     Next v
 End Sub
 
-Public Sub Prune(Index As Variant)
+Public Sub Prune(qNames As Variant)
 Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
 '   Removes unrelated queries from the hierarchy.
 '
@@ -122,26 +122,18 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
 '   are not related. This can be useful for cleaning a large repository.
 '
 '   Args:
-'       Index: A query name, or array of names, to keep.
+'       qNames: A query name, or array of names, to keep.
 '
 '   Raises:
 '       Query not found, I guess? TODO implement.
 '
 '   Determine which queries to keep.
-    Dim baseQueries As Variant
-    baseQueries = Iif(TypeName(Index) = "String", Array(Index), Index)
-    Logger.Info "Pruning queries from [" & Join(baseQueries, ",") & "]"
+    Logger.Catching = Array( _
+        New DepsNotResolvedException,
+        New QueryNotFoundException)
 
     Dim keepQueries As Dictionary
-    Set keepQueries = New Dictionary
-    
-'   Register base queries and their dependencies to be kept.
-    Logger.Catching = New DepsNotResolvedException
-    Dim qn As Variant
-    For Each qn In baseQueries
-        If Not keepQueries.Exists(qn) Then keepQueries.Add qn, Queries(qn)
-        ResolveDependencies keepQueries, qn
-    Next qn
+    Set keepQueries = GetQueryTree(qNames)
     If Not Logger.Caught Is Nothing Then Exit Sub
     Logger.EndCatching
 
@@ -157,6 +149,32 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
         End If
     Next q
 End Sub
+
+Public Function GetQueryTree(qNames As Variant) As Dictionary
+Attribute GetQueryTree.VB_Description = "Returns queries and dependencies for the passed in query names."
+'   Returns queries and dependencies for the passed in query names.
+'
+'   Args:
+'       qNames: A query name, or array of names, to keep.
+'
+'   Returns:
+'       A dictionary of PowerQuery
+'
+    Dim result As New Dictionary
+
+    Dim baseQueries As Variant
+    baseQueries = Iif(TypeName(qNames) = "String", Array(qNames), qNames)
+    Logger.Info "Pruning queries from [" & Join(baseQueries, ",") & "]"
+
+    Dim qn As Variant
+    For Each qn In baseQueries
+        If Not result.Exists(qn) Then result.Add qn, Queries(qn)
+        ResolveDependencies result, qn
+    Next qn
+    If Not Logger.Caught Is Nothing Then Exit Function
+
+    Set GetQueryTree = result
+End Function
 
 
 ' Helpers
