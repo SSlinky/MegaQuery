@@ -153,10 +153,11 @@ Attribute FromStringCollection.VB_Description = "Joins a collection of strings b
 '   Returns:
 '       True if the collection generated a string.
 '
-    If c Is Nothing Then
-        mValue = ""
-        Exit Function
-    End If
+    Select Case True
+        Case Is = c Is Nothing, c.Count = 0:
+            mValue = ""
+            Exit Function
+    End Select
 
     Dim strings() As String
     ReDim strings(1 To c.Count)
