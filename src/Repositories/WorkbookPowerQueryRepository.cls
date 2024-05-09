@@ -174,6 +174,10 @@ Attribute SyncFromSource.VB_Description = "Sets up the queries from the source."
         pq.SyncFromSource
         mQueries.Add wq.Name, pq
     Next wq
+
+    For Each pq In Queries
+        pq.ResolveDependencies mQueries
+    Next pq
 End Sub
 
 
