@@ -45,18 +45,14 @@ Option Explicit
 
 ' Private Backing Store
 '-------------------------------------------------------------------------------
+Private mRepositories As Dictionary
 
 
 ' Properties
 '-------------------------------------------------------------------------------
-Private mRepositories As List
-Public Property Set Repositories(var As List)
+Public Property Get Repositories() As Dictionary
 Attribute Repositories.VB_Description = "The repositories attached to this query manager."
 '   The repositories attached to this query manager.
-    Set mRepositories = var
-End Property
-
-Public Property Get Repositories() As List
     Set Repositories = mRepositories
 End Property
 
@@ -64,8 +60,18 @@ End Property
 ' Constructor
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
-    Set mRepositories = New List
-    mRepositories.Push New WorkbookPowerQueryRepository
+    Set mRepositories = New Dictionary
+
+'   Add all open workbooks using the workbook itself as the key.
+    Dim wb As Workbook
+    Dim qr As WorkbookPowerQueryRepository
+    With Repositories
+        For Each wb In Workbooks
+            Set qr = New WorkbookPowerQueryRepository
+            Set qr.Source = wb
+            .Add wb, qr
+        Next wb
+    End With
 End Sub
 
 
