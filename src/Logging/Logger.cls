@@ -38,7 +38,7 @@ Option Explicit
 ' Private Backing Store
 '-------------------------------------------------------------------------------
 Private mLogLevel As LoggerLevelCode
-Private mExceptLevel As LoggerLevelCode
+Private mExceptionLevel As LoggerLevelCode
 Private mCatching As Variant
 Private mCaught As IException
 
@@ -55,14 +55,14 @@ Public Property Get LogLevel() As LoggerLevelCode
     LogLevel = mLogLevel
 End Property
 
-Public Property Let ExceptLevel(var As LoggerLevelCode)
-Attribute ExceptLevel.VB_Description = "The exception level."
+Public Property Let ExceptionLevel(var As LoggerLevelCode)
+Attribute ExceptionLevel.VB_Description = "The exception level."
 '   The exception level.
-    mExceptLevel = var
+    mExceptionLevel = var
 End Property
 
-Public Property Get ExceptLevel() As LoggerLevelCode
-    ExceptLevel = mExceptLevel
+Public Property Get ExceptionLevel() As LoggerLevelCode
+    ExceptionLevel = mExceptionLevel
 End Property
 
 Public Property Let Catching(var As Variant)
@@ -86,7 +86,7 @@ End Property
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
     LogLevel = LoggerLevelCode.LLNone
-    ExceptLevel = LoggerLevelCode.LLNone
+    ExceptionLevel = LoggerLevelCode.LLNone
     Debug.Print "---- [Logging Started] ----"
 End Sub
 
@@ -139,10 +139,10 @@ Attribute Throw.VB_Description = "Throws and/or logs an exception."
     End If
 
 '   Log, catch, and raise the exception as required.
-    Log e.ExceptLevel, Iif(src = "", "", "[" & src & "]") & e.Description
+    Log e.ExceptionLevel, Iif(src = "", "", "[" & src & "]") & e.Description
     If isCaught Then
         Set mCaught = e
-    ElseIf e.ExceptLevel >= LoggerLevelCode.LLError Then
+    ElseIf e.ExceptionLevel >= LoggerLevelCode.LLError Then
         e.Raise src
     End If
 End Sub
