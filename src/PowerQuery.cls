@@ -134,10 +134,15 @@ Public Sub SyncFromSource()
 Attribute SyncFromSource.VB_Description = "Syncs properties from the source."
 '   Syncs properties from the source.
 '
+    Logger.Log LLDebug, "Parsing formula [" & mSource.Name & "]"
+
     Name = mSource.Name
     ParseFormula mSource.Formula
-    Set mDependencies = Nothing
-    Logger.Log LLDebug, "Resetting deps [" & Name & "]"
+
+    If Not mDependencies Is Nothing Then
+        Set mDependencies = Nothing
+        Logger.Log LLWarn, "Resetting deps [" & Name & "]"
+    End IF
 End Sub
 
 Public Sub ParseFormula(var As String)
@@ -175,9 +180,11 @@ Attribute ResolveDependencies.VB_Description = "Parses the formula to resolve na
         s = StripQueryName(tok)
         If names.Exists(s) Then
             mDependencies.Add s
-            Logger.Log LLDebug, "    Added " & s
+            Logger.Log LLDebug, "  Added " & s
         End If
     Next tok
+
+    If mDependencies.Count = 0 Then Logger.Log LLDebug, "  None"
 End Sub
 
 

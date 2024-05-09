@@ -2,8 +2,8 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "InvalidSourceException"
-Attribute VB_Description = "Invalid Source Exception."
+Attribute VB_Name = "DepsNotResolvedException"
+Attribute VB_Description = "Dependencies not resolved exception."
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -32,16 +32,17 @@ Option Explicit
 Implements IException
 
 '-------------------------------------------------------------------------------
-'   Class: InvalidSourceException
-'   Invalid Source Exception.
+'   Class: DepsNotResolvedException
+'   Dependencies not resolved exception.
 '-------------------------------------------------------------------------------
 
 ' Properties
 '-------------------------------------------------------------------------------
-Private Const LOGLVL As Long = LoggerLevelCode.LLError
-Private Const ERRNUM As Long = 2
+Private Const LOGLVL As Long = LoggerLevelCode.LLCritical
+Private Const ERRNUM As Long = 3
 Private Const ERRDESC As String = _
-    "Source is invalid for this type of repository."
+    "Dependencies not resolved{{CONTEXT}}."
+Private mContext As String
 
 Public Property Get Level() As LoggerLevelCode
 Attribute Level.VB_Description = "The exception level."
@@ -59,7 +60,23 @@ End Property
 Public Property Get Description() As String
 Attribute Description.VB_Description = "The description for the error."
 '   The description for the error.
-    Description = ERRDESC
+    Description = Replace(ERRDESC, "{{CONTEXT}}", Context)
+End Property
+
+Public Property Let Context(var As String)
+Attribute Context.VB_Description = "Adds context to the description."
+'   Adds context to the description.
+    mContext = var
+End Property
+
+Public Property Get Context() As String
+    Context = Iif(Trim(mContext) = "", "", " [" & mContext & "]")
+End Property
+
+Public Property Get Self() As IException
+Attribute Self.VB_Description = "Shortcut to use in With blocks."
+'   Shortcut to use in With blocks.
+    Set Self = Me
 End Property
 
 

@@ -118,11 +118,14 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
     Set keepQueries = New Dictionary
     
 '   Register base queries and their dependencies to be kept.
+    Logger.Catching = New DepsNotResolvedException
     Dim qn As Variant
     For Each qn In baseQueries
         If Not keepQueries.Exists(qn) Then keepQueries.Add qn, Queries(qn)
         ResolveAncestors keepQueries, qn
     Next qn
+    If Not Logger.Caught Is Nothing Then Exit Sub
+    Logger.EndCatching
 
 '   Prune the queries we aren't keeping.
 '   There's no need to check if the query we're deleting has any child
@@ -151,6 +154,14 @@ Attribute ResolveAncestors.VB_Description = "Recursively adds ancestors to the d
     Dim q As PowerQuery
     Set q = Queries(queryName)
 
+    If q.Dependencies Is Nothing Then
+        With New DepsNotResolvedException
+            .Context = q.Name
+            Logger.Throw .Self
+        End With
+        Exit Sub
+    End If
+
     Dim queryDependency As Variant
     For Each queryDependency In q.Dependencies
         If Not d.Exists(queryDependency) Then
@@ -177,9 +188,11 @@ Attribute SyncFromSource.VB_Description = "Sets up the queries from the source."
         mQueries.Add wq.Name, pq
     Next wq
 
-    For Each pq In Queries
+    Dim v As Variant
+    For Each v In Queries.Items
+        Set pq = v
         pq.ResolveDependencies mQueries
-    Next pq
+    Next v
 End Sub
 
 

@@ -37,32 +37,70 @@ Option Explicit
 
 ' Private Backing Store
 '-------------------------------------------------------------------------------
-Private mLevel As LoggerLevelCode
+Private mLogLevel As LoggerLevelCode
+Private mExceptLevel As LoggerLevelCode
+Private mCatching As Variant
+Private mCaught As IException
 
 
 ' Properties
 '-------------------------------------------------------------------------------
-Public Property Let Level(var As LoggerLevelCode)
-Attribute Level.VB_Description = "The logger level."
+Public Property Let LogLevel(var As LoggerLevelCode)
+Attribute LogLevel.VB_Description = "The logger level."
 '   The logger level.
-    mLevel = var
+    mLogLevel = var
 End Property
 
-Public Property Get Level() As LoggerLevelCode
-    Level = mLevel
+Public Property Get LogLevel() As LoggerLevelCode
+    LogLevel = mLogLevel
+End Property
+
+Public Property Let ExceptLevel(var As LoggerLevelCode)
+Attribute ExceptLevel.VB_Description = "The exception level."
+'   The exception level.
+    mExceptLevel = var
+End Property
+
+Public Property Get ExceptLevel() As LoggerLevelCode
+    ExceptLevel = mExceptLevel
+End Property
+
+Public Property Let Catching(var As Variant)
+Attribute Catching.VB_Description = "Exceptions being caught."
+'   Exceptions being caught.
+    mCatching = Iif(TypeName(var) = "Variant()", var, Array(var))
+End Property
+
+Public Property Get Catching() As Variant
+    Catching = mCatching
+End Property
+
+Public Property Get Caught() As IException
+Attribute Caught.VB_Description = "The caught exception."
+'   The caught exception.
+    Set Caught = mCaught
 End Property
 
 
 ' Constructor
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
-    Level = LoggerLevelCode.LLNone
+    LogLevel = LoggerLevelCode.LLNone
+    ExceptLevel = LoggerLevelCode.LLNone
     Debug.Print "---- [Logging Started] ----"
 End Sub
 
 
 ' Methods
 '-------------------------------------------------------------------------------
+Public Sub EndCatching()
+Attribute EndCatching.VB_Description = "Stops tracking exceptions to catch."
+'   Stops tracking exceptions to catch.
+'
+    Set mCatching = Nothing
+    Set mCaught = Nothing
+End Sub
+
 Public Sub Log(level As LoggerLevelCode, msg As String)
 Attribute Log.VB_Description = "Logs the message if it meets the LoggerLevelCode."
 '   Logs the message if it meets the LoggerLevelCode.
@@ -71,7 +109,7 @@ Attribute Log.VB_Description = "Logs the message if it meets the LoggerLevelCode
 '       level: The logger level.
 '       msg: The text to log.
 '
-    If level < Level Then Exit Sub
+    If level < LogLevel Then Exit Sub
     Debug.Print LoggerLevelLabel(level) & msg
 End Sub
 
@@ -84,10 +122,29 @@ Attribute Throw.VB_Description = "Throws and/or logs an exception."
 '       src: The source of the exception.
 '
 '   Raises:
-'       e
+'       e unless we're catching it.
 '
-    Log e.Level, Iif(src = "", "", "[" & src & "]") & e.Description
-    If e.Level >= LoggerLevelCode.LLError Then e.Raise src
+'   Check whether to catch the exception or not.
+    Dim isCaught As Boolean
+    If TypeName(Catching) = "Nothing" Then
+        isCaught = True
+    Else
+        Dim n As Variant
+        For Each n In Catching
+            If e = n Then
+                isCaught = True
+                Exit For
+            End If  
+        Next n
+    End If
+
+'   Log, catch, and raise the exception as required.
+    Log e.ExceptLevel, Iif(src = "", "", "[" & src & "]") & e.Description
+    If isCaught Then
+        Set mCaught = e
+    ElseIf e.ExceptLevel >= LoggerLevelCode.LLError Then
+        e.Raise src
+    End If
 End Sub
 
 

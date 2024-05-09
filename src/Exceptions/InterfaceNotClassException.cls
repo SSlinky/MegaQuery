@@ -33,7 +33,7 @@ Implements IException
 
 '-------------------------------------------------------------------------------
 '   Class: InterfaceNotClassException
-'   An interface describing an exception.
+'   Interface is not a Class Exception.
 '-------------------------------------------------------------------------------
 
 ' Properties
