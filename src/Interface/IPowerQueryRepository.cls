@@ -38,6 +38,11 @@ Option Explicit
 
 ' Properties
 '-------------------------------------------------------------------------------
+Public Property Get Queries() As Dictionary
+Attribute Queries.VB_Description = "The queries in the attached workbook."
+'   The queries in the attached workbook.
+    Logger.Throw New InterfaceNotClassException
+End Property
 
 
 ' Constructor
@@ -49,6 +54,23 @@ End Sub
 
 ' Methods
 '-------------------------------------------------------------------------------
+Public Sub Add(q As PowerQuery)
+Attribute Add.VB_Description = "Adds a query to the repository."
+'   Adds a query to the repository.
+    Logger.Throw New InterfaceNotClassException
+End Sub
+
+Public Sub AddTree(queryTree As Dictionary, overwrite As Boolean)
+Attribute AddTree.VB_Description = "Adds a query tree to the repository."
+'   Adds a query to the repository.
+    Logger.Throw New InterfaceNotClassException
+End Sub
+
+Public Function GetQueryTree(qNames As Variant) As Dictionary
+Attribute GetQueryTree.VB_Description = "Returns queries and dependencies for the passed in queries."
+'   Returns queries and dependencies for the passed in queries.
+    Logger.Throw New InterfaceNotClassException
+End Function
 
 
 ' Helpers
