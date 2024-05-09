@@ -147,8 +147,8 @@ Attribute Throw.VB_Description = "Throws and/or logs an exception."
     End If
 End Sub
 
-Public Sub Debug(msg As String)
-Attribute Debug.VB_Description = "Logs a Debug message."
+Public Sub Debg(msg As String)
+Attribute Debg.VB_Description = "Logs a Debug message."
 '   Logs a Debug message.
 '
 '   Args:
