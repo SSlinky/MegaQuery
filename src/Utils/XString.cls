@@ -117,7 +117,7 @@ Attribute BeforeDelimiter.VB_Description = "Returns the substring before a strin
     Dim startPos As Long
     startPos = IndexOf(subStr)
     If startPos > 0 Then
-        BeforeDelimiter = Left(mValue, startPos - 1)
+        BeforeDelimiter = VBA.Left(mValue, startPos - 1)
     End If
 End Function
 
@@ -132,7 +132,7 @@ Public Function EndsWith(subStr As String) As Boolean
 Attribute EndsWith.VB_Description = "Returns true if the string ends with the substring."
 '   Returns true if the string ends with the substring.
 '
-    EndsWith = Right(mValue, Len(subStr)) = subStr
+    EndsWith = VBA.Right(mValue, Len(subStr)) = subStr
 End Function
 
 Public Function FromStringCollection(c As Collection, d As String) As Boolean
@@ -180,7 +180,7 @@ Public Function StartsWith(subStr As String) As Boolean
 Attribute StartsWith.VB_Description = "Returns true if the string starts with the substring."
 '   Returns true if the string starts with the substring.
 '
-    StartsWith = Left(mValue, Len(subStr)) = subStr
+    StartsWith = VBA.Left(mValue, Len(subStr)) = subStr
 End Function
 
 Public Function Left(n As Long) As XString
