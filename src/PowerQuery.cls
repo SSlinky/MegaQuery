@@ -331,9 +331,9 @@ Attribute GetWords.VB_Description = "Converts a query line into a string array o
 '           Quote detected.                
             Case c = QUOT:
                 s = s + 2
-                i = i - 1
+                i = i - 1 - (s And 1)
                 AddWord var, r, p, i
-                i = i + 1
+                i = i + 1 + (s And 1)
 '           Anything else while string.
             Case s And 2 = 2:
 '           Space detected.
