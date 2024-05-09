@@ -102,7 +102,7 @@ End Property
 Public Property Let Name(var As String)
 Attribute Name.VB_Description = "The name of the query."
 '   The name of the query.
-    mName = var
+    If var <> "" Then mName = var
 End Property
 
 Public Property Get Name() As String
@@ -134,6 +134,7 @@ Public Sub SyncFromSource()
 Attribute SyncFromSource.VB_Description = "Syncs properties from the source."
 '   Syncs properties from the source.
 '
+    Name = mSource.Name
     ParseFormula mSource.Formula
     Set mDependencies = Nothing
     Logger.Log LLDebug, "Resetting deps [" & Name & "]"
@@ -149,9 +150,9 @@ Attribute ParseFormula.VB_Description = "Parses a query formula into its compone
     Dim queryParts As Dictionary
     Set queryParts = Deserialise(var)
 
-    mName = queryParts("name")
-    mFormula = queryParts("formula")
-    mDescription = queryParts("description")
+    Name = queryParts("name")
+    Formula = queryParts("formula")
+    Description = queryParts("description")
 End Sub
 
 Public Sub ResolveDependencies(names As Dictionary)
