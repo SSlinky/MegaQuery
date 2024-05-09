@@ -128,13 +128,6 @@ Attribute Contains.VB_Description = "Returns true if the string contains the sub
     Contains = InStr(mValue, subStr) > 0
 End Function
 
-Public Function EndValue(n As Long) As String
-Attribute EndValue.VB_Description = "Returns the end n characters of the string."
-'   Returns the end n characters of the string.
-'
-    EndValue = Right(mValue, Len(mValue) - n)
-End Function
-
 Public Function EndsWith(subStr As String) As Boolean
 Attribute EndsWith.VB_Description = "Returns true if the string ends with the substring."
 '   Returns true if the string ends with the substring.
@@ -190,6 +183,55 @@ Attribute StartsWith.VB_Description = "Returns true if the string starts with th
     StartsWith = Left(mValue, Len(subStr)) = subStr
 End Function
 
+Public Function Left(n As Long) As XString
+Attribute Left.VB_Description = "Returns the left n chars of the string."
+'   Returns the left n chars of the string.
+'
+'   Args:
+'       n: The number of characters to limit to.
+'           Positive number works like a normal Left function.
+'           Negative number reduces length by n.
+'
+'   Returns:
+'       A new XString with the truncated value.
+'
+    Dim result As New XString
+
+    Select Case n
+        Case < 0:
+            result = VBA.Left(mValue, Len(mValue) + n)
+        Case 0:
+        Case > 0:
+            result = VBA.Left(mValue, n)
+    End Select
+
+    Set Left = result
+End Function
+
+Public Function Right(n As Long) As XString
+Attribute Right.VB_Description = "Returns the right n chars of the string."
+'   Returns the right n chars of the string.
+'
+'   Args:
+'       n: The number of characters to limit to.
+'           Positive number works like a normal Right function.
+'           Negative number reduces length by n.
+'
+'   Returns:
+'       A new XString with the truncated value.
+'
+    Dim result As New XString
+
+    Select Case n
+        Case < 0:
+            result = VBA.Right(mValue, Len(mValue) + n)
+        Case 0:
+        Case > 0:
+            result = VBA.Right(mValue, n)
+    End Select    
+
+    Set Right = result
+End Function
 
 ' Helpers
 '-------------------------------------------------------------------------------
