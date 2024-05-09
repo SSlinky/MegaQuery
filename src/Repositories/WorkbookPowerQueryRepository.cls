@@ -116,10 +116,12 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
     Dim keepQueries As Dictionary
     Set keepQueries = New Dictionary
     
-    Dim queryName As Variant
-    For Each queryName In baseQueries
-        ResolveAncestors keepQueries, queryName
-    Next queryName
+'   Register base queries and their dependencies to be kept.
+    Dim qn As Variant
+    For Each qn In baseQueries
+        If Not keepQueries.Exists(qn) Then keepQueries.Add qn, Queries(qn)
+        ResolveAncestors keepQueries, qn
+    Next qn
 
 '   Prune the queries we aren't keeping.
 '   There's no need to check if the query we're deleting has any child
