@@ -43,10 +43,10 @@ Private Const ERRNUM As Long = 1
 Private Const ERRDESC As String = _
     "Cannot create an instance of the abstract class or interface."
 
-Public Property Get Level() As LoggerLevelCode
-Attribute Level.VB_Description = "The exception level."
+Public Property Get ExceptionLevel() As LoggerLevelCode
+Attribute ExceptionLevel.VB_Description = "The exception level."
 '   The exception level.
-    Level = LOGLVL
+    ExceptionLevel = LOGLVL
 End Property
 
 Public Property Get Number() As Long
@@ -86,9 +86,9 @@ End Sub
 
 ' Interface Implementation
 '-------------------------------------------------------------------------------
-Public Property Get IException_Level() As LoggerLevelCode
-Attribute IException_Level.VB_Description = "The exception level."
-    IException_Level = Level
+Public Property Get IException_ExceptionLevel() As LoggerLevelCode
+Attribute IException_ExceptionLevel.VB_Description = "The exception level."
+    IException_ExceptionLevel = ExceptionLevel
 End Property
 
 Public Property Get IException_Number() As Long
