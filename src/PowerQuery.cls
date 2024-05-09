@@ -161,6 +161,7 @@ Attribute ResolveDependencies.VB_Description = "Parses the formula to resolve na
 '   Args:
 '       names: A dictionary of query names.
 '
+    Logger.Log LLDebug, "Resolving dependencies [" & Name & "]"
     Set mDependencies = New Collection
     If mFormula = "" Then Exit Sub
     
@@ -169,7 +170,12 @@ Attribute ResolveDependencies.VB_Description = "Parses the formula to resolve na
 
     Dim tok As Variant
     For Each tok In toks
-        If names.Exists(tok) Then mDependencies.Add tok
+        Dim s As String
+        s = StripQueryName(tok)
+        If names.Exists(s) Then
+            mDependencies.Add s
+            Logger.Log LLDebug, "    Added " & s
+        End If
     Next tok
 End Sub
 
@@ -383,6 +389,26 @@ Attribute CharIsDelimiter.VB_Description = "True if the character is a delimiter
     Next d
 End Function
 
+Private Function StripQueryName(var As Variant) As String
+Attribute StripQueryName.VB_Description = "Removes the special characters from a query name."
+'   Removes the special characters from a query name.
+'
+'   Args:
+'       var: The query name to strip.
+'
+'   Returns:
+'       Foo if the format is #"Foo" otherwise the original string.
+'
+    Dim s As New XString
+    s = CStr(var)
+
+    If s.StartsWith("#" & QUOT) And s.EndsWith(QUOT) Then
+        StripQueryName = s.Left(-1).Right(-2)
+        Exit Function
+    End If
+
+    StripQueryName = var
+End Function
 
 ' Event Handlers
 '-------------------------------------------------------------------------------
