@@ -140,7 +140,7 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
     Dim qn As Variant
     For Each qn In baseQueries
         If Not keepQueries.Exists(qn) Then keepQueries.Add qn, Queries(qn)
-        ResolveAncestors keepQueries, qn
+        ResolveDependencies keepQueries, qn
     Next qn
     If Not Logger.Caught Is Nothing Then Exit Sub
     Logger.EndCatching
@@ -161,8 +161,8 @@ End Sub
 
 ' Helpers
 '-------------------------------------------------------------------------------
-Private Sub ResolveAncestors(d As Dictionary, queryName As Variant)
-Attribute ResolveAncestors.VB_Description = "Recursively adds ancestors to the dictionary."
+Private Sub ResolveDependencies(d As Dictionary, queryName As Variant)
+Attribute ResolveDependencies.VB_Description = "Recursively adds ancestors to the dictionary."
 '   Recursively adds ancestors to the dictionary.
 '
 '   Args:
@@ -184,7 +184,7 @@ Attribute ResolveAncestors.VB_Description = "Recursively adds ancestors to the d
     For Each queryDependency In q.Dependencies
         If Not d.Exists(queryDependency) Then
             d.Add queryDependency, Queries(queryDependency)
-            ResolveAncestors d, queryDependency
+            ResolveDependencies d, queryDependency
         End If
     Next queryDependency
 End Sub
