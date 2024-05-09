@@ -77,6 +77,39 @@ End Sub
 
 ' Methods
 '-------------------------------------------------------------------------------
+Public Sub Clone( _
+    qName As Variant, _
+    repoSrc As IPowerQueryRepository, _
+    repoDest As IPowerQueryRepository, _
+    Optional overwrite As Boolean)
+Attribute Clone.VB_Description = "Dosctring."
+'   Dosctring.
+'
+'   Args:
+'       qName: The name, or array of names, of the queries to clone.
+'       repoSrc: The source repository.
+'       repoDest: The destination repository.
+'       overwrite: Whether to overwrite existing queries or not.
+'
+'   Catch possible exceptions.
+    Logger.Catching = Array( _
+        New DepsNotResolvedException,
+        New QueryNotFoundException)
+
+    Dim qTree As Dictionary
+    Set qTree = repoSrc.GetQueryTree(qName)
+
+'   Abort if exception was caught.
+    If Not Logger.Caught Is Nothing Then
+        Logger.Warn "Aborting clone"
+        Exit Sub
+    End If
+    Logger.EndCatching
+
+'   Copy query tree.
+    Logger.Info "Cloning queries [" & Join(qTree.Keys, ",") & "]"
+    repoDest.AddTree qTree, overwrite
+End Sub
 
 
 ' Helpers
