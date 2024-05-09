@@ -96,6 +96,24 @@ Attribute Add.VB_Description = "Adds a query to the repository."
     Queries(q.Name) = q
 End Sub
 
+Public Sub AddTree(queryTree As Dictionary, overwrite As Boolean)
+Attribute AddTree.VB_Description = "Adds a query tree to the repository."
+'   Adds a query tree to the repository.
+'
+'   Args:
+'       queryTree: a dictionary of queries to add.
+'       overwrite: whether the incoming queries should overwrite existing.
+'
+    Dim v As Variant
+    Dim q As PowerQuery
+    For Each v In queryTree
+        Set q = v
+        If Not Queries.Exists(q.Name) Or overwrite Then
+            Queries(q.Name) = q
+        End If
+    Next v
+End Sub
+
 Public Sub Prune(Index As Variant)
 Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
 '   Removes unrelated queries from the hierarchy.
