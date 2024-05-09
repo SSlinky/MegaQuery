@@ -57,6 +57,7 @@ End Property
 '-------------------------------------------------------------------------------
 Private Sub Class_Initialize()
     Level = LoggerLevelCode.LLNone
+    Debug.Print "---- [Logging Started] ----"
 End Sub
 
 

@@ -104,7 +104,7 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
 '   are not related. This can be useful for cleaning a large repository.
 '
 '   Args:
-'       Index: A query name or array of names.
+'       Index: A query name, or array of names, to keep.
 '
 '   Raises:
 '       Query not found, I guess? TODO implement.
@@ -112,6 +112,7 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
 '   Determine which queries to keep.
     Dim baseQueries As Variant
     baseQueries = Iif(TypeName(Index) = "String", Array(Index), Index)
+    Logger.Log LLInfo, "Pruning queries from [" & Join(baseQueries, ",") & "]"
 
     Dim keepQueries As Dictionary
     Set keepQueries = New Dictionary
@@ -163,6 +164,7 @@ Private Sub SyncFromSource()
 Attribute SyncFromSource.VB_Description = "Sets up the queries from the source."
 '   Sets up the queries from the source.
 '
+    Logger.Log LLInfo, "Synchronising to source [" & Source.Name & "]"
     Set mQueries = New Dictionary
 
     Dim pq As PowerQuery
