@@ -128,7 +128,8 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
     Dim q As WorkbookQuery
     For Each q In mSource.Queries
         If Not keepQueries.Exists(q.Name) Then
-            q.Delete
+            Logger.Log LLInfo, "Deleting [" & q.Name & "]"
+            ' q.Delete
         End If
     Next q
 End Sub
