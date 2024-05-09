@@ -129,7 +129,7 @@ Attribute Prune.VB_Description = "Removes unrelated queries from the hierarchy."
 '
 '   Determine which queries to keep.
     Logger.Catching = Array( _
-        New DepsNotResolvedException,
+        New DepsNotResolvedException, _
         New QueryNotFoundException)
 
     Dim keepQueries As Dictionary

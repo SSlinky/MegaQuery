@@ -93,7 +93,7 @@ Attribute Clone.VB_Description = "Dosctring."
 '
 '   Catch possible exceptions.
     Logger.Catching = Array( _
-        New DepsNotResolvedException,
+        New DepsNotResolvedException, _
         New QueryNotFoundException)
 
     Dim qTree As Dictionary
