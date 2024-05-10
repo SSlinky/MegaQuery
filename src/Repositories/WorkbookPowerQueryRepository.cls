@@ -244,6 +244,19 @@ Attribute IPowerQueryRepository_Queries.VB_Description = "The queries in the att
     Set IPowerQueryRepository_Queries = Queries
 End Property
 
+Public Property Let IPowerQueryRepository_Source(var As Variant)
+Attribute Source.VB_Description = "The repository source."
+    IPowerQueryRepository_Source = var
+End Property
+
+Public Property Get IPowerQueryRepository_Source() As Variant
+    IPowerQueryRepository_Source = Source
+End Property
+
+Public Property Set IPowerQueryRepository_Source(var As Variant)
+    Set IPowerQueryRepository_Source = var
+End Property
+
 Public Sub IPowerQueryRepository_Add(q As PowerQuery)
 Attribute IPowerQueryRepository_Add.VB_Description = "Adds a query to the repository."
 '   Adds a query to the repository.

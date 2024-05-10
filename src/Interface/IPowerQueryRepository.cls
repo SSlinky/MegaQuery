@@ -41,7 +41,17 @@ Option Explicit
 Public Property Get Queries() As Dictionary
 Attribute Queries.VB_Description = "The queries in the attached workbook."
 '   The queries in the attached workbook.
-    Logger.Throw New InterfaceNotClassException
+End Property
+
+Public Property Let Source(var As Variant)
+Attribute Source.VB_Description = "The repository source."
+'   The repository source.
+End Property
+
+Public Property Get Source() As Variant
+End Property
+
+Public Property Set Source(var As Variant)
 End Property
 
 
