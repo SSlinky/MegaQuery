@@ -61,6 +61,7 @@ End Property
 Public Property Let Source(var As Variant)
 Attribute Source.VB_Description = "The repository source."
 '   The repository source.
+    Logger.Throw New InvalidSourceException
 End Property
 
 Public Property Get Source() As Variant

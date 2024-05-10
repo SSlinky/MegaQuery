@@ -66,6 +66,7 @@ Public Property Get Source() As Variant
 End Property
 
 Public Property Set Source(var As Variant)
+    Logger.Throw New InvalidSourceException
 End Property
 
 
