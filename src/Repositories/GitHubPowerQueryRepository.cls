@@ -82,11 +82,19 @@ End Sub
 Public Sub Add(q As PowerQuery)
 Attribute Add.VB_Description = "Adds a query to the repository."
 '   Adds a query to the repository.
+    With New NotImplementedException
+        .Context = "GitHubPowerQueryRepository.Add"
+        Logger.Throw .Self
+    End With
 End Sub
 
 Public Sub AddTree(queryTree As Dictionary, overwrite As Boolean)
 Attribute AddTree.VB_Description = "Adds a query tree to the repository."
 '   Adds a query to the repository.
+    With New NotImplementedException
+        .Context = "GitHubPowerQueryRepository.AddTree"
+        Logger.Throw .Self
+    End With
 End Sub
 
 Public Function GetQueryTree(qNames As Variant) As Dictionary
