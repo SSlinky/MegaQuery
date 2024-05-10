@@ -36,13 +36,17 @@ Implements IException
 '   Invalid Source Exception.
 '-------------------------------------------------------------------------------
 
-' Properties
+' Private Backing Store
 '-------------------------------------------------------------------------------
 Private Const LOGLVL As Long = LoggerLevelCode.LLError
 Private Const ERRNUM As Long = 2
 Private Const ERRDESC As String = _
     "Source is invalid for this type of repository."
+Private mContext As String
 
+
+' Properties
+'-------------------------------------------------------------------------------
 Public Property Get ExceptionLevel() As LoggerLevelCode
 Attribute ExceptionLevel.VB_Description = "The exception level."
 '   The exception level.
@@ -59,7 +63,17 @@ End Property
 Public Property Get Description() As String
 Attribute Description.VB_Description = "The description for the error."
 '   The description for the error.
-    Description = ERRDESC
+    Description = Iif(Context = "", ERRDESC, ERRDESC & vbNewLine & Context)
+End Property
+
+Public Property Let Context(var As String)
+Attribute Context.VB_Description = "Adds context to the description."
+'   Adds context to the description.
+    mContext = var
+End Property
+
+Public Property Get Context() As String
+    Context = Trim(mContext)
 End Property
 
 Public Property Get Self() As IException
@@ -105,6 +119,20 @@ End Property
 Public Property Get IException_Description() As String
 Attribute IException_Description.VB_Description = "The description for the error."
     IException_Description = Description
+End Property
+
+Public Property Let IException_Context(var As String)
+Attribute Context.VB_Description = "Adds context to the description."
+    Context = var
+End Property
+
+Public Property Get IException_Context() As String
+    IException_Context = Context
+End Property
+
+Public Property Get IException_Self() As IException
+Attribute Self.VB_Description = "Shortcut to use in With blocks."
+    Set IException_Self = Self
 End Property
 
 Public Sub IException_Raise(Optional Source As String)

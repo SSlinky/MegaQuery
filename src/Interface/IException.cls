@@ -54,6 +54,19 @@ Attribute Description.VB_Description = "The description for the error."
 'The description for the error.
 End Property
 
+Public Property Let Context(var As String)
+Attribute Context.VB_Description = "Adds context to the description."
+'   Adds context to the description.
+End Property
+
+Public Property Get Context() As String
+End Property
+
+Public Property Get Self() As IException
+Attribute Self.VB_Description = "Shortcut to use in With blocks."
+'   Shortcut to use in With blocks.
+End Property
+
 
 ' Constructor
 '-------------------------------------------------------------------------------
