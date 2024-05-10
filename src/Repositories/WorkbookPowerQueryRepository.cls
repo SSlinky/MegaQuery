@@ -240,7 +240,6 @@ End Sub
 '-------------------------------------------------------------------------------
 Public Property Get IPowerQueryRepository_Queries() As Dictionary
 Attribute IPowerQueryRepository_Queries.VB_Description = "The queries in the attached source."
-'   The queries in the attached source.
     Set IPowerQueryRepository_Queries = Queries
 End Property
 
@@ -259,18 +258,15 @@ End Property
 
 Public Sub IPowerQueryRepository_Add(q As PowerQuery)
 Attribute IPowerQueryRepository_Add.VB_Description = "Adds a query to the repository."
-'   Adds a query to the repository.
     Add q    
 End Sub
 
 Public Sub IPowerQueryRepository_AddTree(queryTree As Dictionary, overwrite As Boolean)
 Attribute IPowerQueryRepository_AddTree.VB_Description = "Adds a query tree to the repository."
-'   Adds a query to the repository.
     AddTree queryTree, overwrite
 End Sub
 
 Public Function IPowerQueryRepository_GetQueryTree(qNames As Variant) As Dictionary
 Attribute IPowerQueryRepository_GetQueryTree.VB_Description = "Returns queries and dependencies for the passed in queries."
-'   Returns queries and dependencies for the passed in queries.
     Set IPowerQueryRepository_GetQueryTree = GetQueryTree(qNames)
 End Function

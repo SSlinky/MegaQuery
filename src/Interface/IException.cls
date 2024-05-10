@@ -40,18 +40,18 @@ Option Explicit
 '-------------------------------------------------------------------------------
 Public Property Get ExceptionLevel() As LoggerLevelCode
 Attribute ExceptionLevel.VB_Description = "The exception level."
-    Logger.Throw New InterfaceNotClassException
+'   The exception level.
 End Property
 
 Public Property Get Number() As Long
 Attribute Number.VB_UserMemId = 0
 Attribute Number.VB_Description = "The error number with vbObjectError added."
-    Logger.Throw New InterfaceNotClassException
+'   The error number with vbObjectError added.
 End Property
 
 Public Property Get Description() As String
 Attribute Description.VB_Description = "The description for the error."
-    Logger.Throw New InterfaceNotClassException
+'The description for the error.
 End Property
 
 
@@ -65,5 +65,5 @@ End Sub
 '-------------------------------------------------------------------------------
 Public Sub Raise(Optional Source As String)
 Attribute Raise.VB_Description = "Raises this exception."
-    Logger.Throw New InterfaceNotClassException
+'   Raises this exception.
 End Sub
