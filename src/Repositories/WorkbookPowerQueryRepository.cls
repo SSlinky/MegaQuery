@@ -106,10 +106,10 @@ Attribute AddTree.VB_Description = "Adds a query tree to the repository."
 '
     Dim v As Variant
     Dim q As PowerQuery
-    For Each v In queryTree
+    For Each v In queryTree.Items
         Set q = v
         If Not Queries.Exists(q.Name) Or overwrite Then
-            Queries(q.Name) = q
+            Set Queries(q.Name) = q
         End If
     Next v
 End Sub
@@ -164,7 +164,7 @@ Attribute GetQueryTree.VB_Description = "Returns queries and dependencies for th
 
     Dim baseQueries As Variant
     baseQueries = Iif(TypeName(qNames) = "String", Array(qNames), qNames)
-    Logger.Info "Pruning queries from [" & Join(baseQueries, ",") & "]"
+    Logger.Info "Getting tree for [" & Join(baseQueries, ",") & "]"
 
     Dim qn As Variant
     For Each qn In baseQueries
