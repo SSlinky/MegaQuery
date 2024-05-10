@@ -62,6 +62,12 @@ Attribute Description.VB_Description = "The description for the error."
     Description = ERRDESC
 End Property
 
+Public Property Get Self() As IException
+Attribute Self.VB_Description = "Shortcut to use in With blocks."
+'   Shortcut to use in With blocks.
+    Set Self = Me
+End Property
+
 
 ' Methods
 '-------------------------------------------------------------------------------
